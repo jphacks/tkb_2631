@@ -10,7 +10,7 @@ ChatGPT Codex（2026-10-19〜20）で作ったものを Claude Code に引き継
 ## 構成
 - 静的サイト（ビルドなし）：`index.html` / `style.css` / `app.js`
 - データは localStorage（キー `tanboru-v1`）。大学メール認証・他ユーザー同期・連絡機能は未接続
-- 素材：`assets/library/`（ユーザー提供の透過PNG。元素材108点は `~/Desktop/たんぽる/`）
+- 素材：`assets/library/`（ユーザー提供の透過PNG。元素材108点は `~/Desktop/AI制作成果物/たんぼる/たんぽる/`）
 - `docs/`：Codex時代のスクリーンショットとイラスト生成プロンプト
 - 起動：`python3 -m http.server 5580` → http://localhost:5580 （スマホ幅で確認）
 
