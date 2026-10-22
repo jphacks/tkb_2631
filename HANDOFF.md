@@ -44,3 +44,7 @@ ChatGPT Codex（2026-10-19〜20）で作ったものを Claude Code に引き継
 - タスク画面の1ページの件数を画面の高さに合わせて自動調整（小さいスマホでもページ送りが隠れない）
 - 集中タイマー：終了時に振動・音・端末通知、集中中は画面が消えないように。取り組んだタスクに集中時間を記録し、終了画面から完了にできる
 - iPhone のセーフエリア対応、別タブでの変更を自動反映、使われていないHTML/CSS/JSを整理
+
+## 公開
+- https://tanboru.vercel.app （Vercel・リンクを知っている人だけが見る想定。noindex で検索エンジンに載らない設定）
+- 再デプロイ：`vercel deploy --prod --yes`（docs/・HANDOFF.md・.claude は .vercelignore で除外）
