@@ -717,3 +717,4 @@ main{padding-bottom:14px}
 @media(max-height:700px){main{padding-bottom:12px}[data-page="home"] .lowgrid{padding-bottom:12px}}
 /* 山は薄い緑の地面のうしろに置く */
 [data-page="home"] .supplied-field .field-mountain{z-index:-1}
+.day-sum b small{font-size:14px;font-weight:700;margin-left:2px;color:#137b4e}
