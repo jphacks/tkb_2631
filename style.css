@@ -848,3 +848,7 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 /* がんばりレポート：下メニューと同じ黄色（--yellow）に白い文字。白が沈まないよう、ごく薄い影をつける */
 .day-record-btn,.day-record-btn.empty{background:var(--yellow);color:#fff;text-shadow:0 1px 2px rgba(107,90,30,.45)}
 .day-record-btn .ui-icon{color:#fff;filter:drop-shadow(0 1px 1.5px rgba(107,90,30,.45))}
+/* 作業場の一覧：顔は30pxで少し重ね、2人まで顔の列（50px）に収めて文字と重ならないように */
+#main .room-row .room-faces{width:50px;overflow:hidden}
+#main .room-row .room-faces .avatar.sprite{width:30px;height:30px;margin-left:-12px}
+#main .room-row .room-faces .avatar.sprite:first-child{margin-left:0}
