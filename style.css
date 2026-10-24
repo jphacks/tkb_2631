@@ -795,3 +795,19 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 .room-members.tiles.many{gap:8px 10px}
 .room-members.tiles.many .member-tile{min-width:52px}
 .room-members.tiles.many .member-tile .avatar.sprite{width:44px;height:44px}
+/* 作業場：一覧の上は「作業場をつくる」のバーだけ（設定はポップアップの中） */
+.room-create-bar{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:0 16px;border-radius:12px;background:var(--green);color:#fffef8;font-size:16px;font-weight:700;text-align:left;flex-shrink:0;box-shadow:0 2px 8px rgba(40,65,35,.05)}
+.room-create-bar span{flex:1}
+.room-create-bar .ui-icon{width:22px;height:22px;flex-shrink:0}
+.room-create-pop h2{margin:0 0 14px}
+.room-create-pop .room-create{padding:0;background:none;box-shadow:none}
+/* ダイアログの既定（ボタンの横いっぱい・ラベルの余白）を、この中では使わない */
+.room-create-pop .room-times .primary.icon-btn{width:48px;height:48px;min-width:48px;min-height:48px;margin:0 0 0 auto}
+.room-create-pop .room-custom{margin:0}
+.room-create-pop .room-select{margin-top:8px}
+.room-create-pop .room-select:first-child{margin-top:0}
+.room-create-pop .room-mark-input{margin-top:8px}
+/* 作業場をつくるポップアップは左右16px（チップを1行に収める） */
+#modal:has(.room-create-pop){padding:24px 16px 20px}
+.room-create-pop .room-times>button:not(.primary),.room-create-pop .room-seats>button{padding:0 11px;white-space:nowrap}
+.room-create-pop .room-times{gap:5px}
