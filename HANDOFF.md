@@ -49,7 +49,10 @@ ChatGPT Codex（2026-10-19〜20）で作ったものを Claude Code に引き継
 ## 公開
 - https://tanboru.vercel.app （Vercel・リンクを知っている人だけが見る想定。noindex で検索エンジンに載らない設定）
 - GitHub：https://github.com/kimie6710-ux/tkb_2631 （非公開）
-- 再デプロイ：`vercel deploy --prod --yes`（docs/・HANDOFF.md・.claude は .vercelignore で除外）
+- 再デプロイ：このフォルダで直接 `vercel deploy` すると「コミット作成者に権限がない」として Blocked になる（GitHub につないで以降）。git 情報を含まないコピーから行う：
+  `D=$(mktemp -d) && git archive HEAD | tar -x -C "$D" && cp -R .vercel "$D/" && (cd "$D" && vercel deploy --prod --yes)`
+  （docs/・HANDOFF.md・.claude は .vercelignore で除外）
+- チームのリポジトリ：https://github.com/jphacks/tkb_2631 。自分の変更は `chiao` ブランチだけ（main はチームのもの）
 
 ## 2026-10-24 作業場（いっしょに集中する場所）
 - 大目標「誰かと一緒に取り組むことで前向きに進める・新しいつながりが生まれる」に合わせ、集中タイマーを「作業場」に統合
