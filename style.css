@@ -864,3 +864,21 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 /* ホーム：「みんなと集中する」の帯は元の薄い緑に戻す */
 :root{--focus-band:#e3efd6}
 [data-page="home"] .quickfocus small{color:var(--sub)}
+/* 設定の中の「プロフィールを編集」（→付きの行） */
+.settings-link{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;margin-top:6px;padding:6px 16px;border-radius:12px;background:var(--tint);text-align:left;color:var(--ink)}
+.settings-link>span{flex:1;min-width:0}
+.settings-link b{display:block;font-size:14px}
+.settings-link small{display:block;font-size:14px;color:var(--sub);margin-top:2px}
+.settings-link .ui-icon{width:20px;height:20px;flex-shrink:0}
+#modalcontent>.settings-group:first-of-type{margin-top:4px}
+/* 設定：プロフィールの行は「顔・名前・編集 ›」の1行。ポップアップを画面に収める */
+.settings-link{min-height:48px;padding:6px 12px 6px 10px}
+.settings-link .avatar.sprite{width:34px;height:34px;flex-shrink:0}
+.settings-link>span:not(.avatar){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.settings-link small{margin:0;color:var(--green);font-weight:700;white-space:nowrap}
+#modal:has(#settingsForm){padding:22px 20px 18px}
+#modal:has(#settingsForm) h2{margin:0 0 4px}
+#modal:has(#settingsForm) .settings-group{margin:12px 0 0}
+@media(max-height:700px){#settingsForm .switch-row{min-height:40px}#modal:has(#settingsForm) .icon-btn{margin-top:8px}#modal:has(#settingsForm) .settings-logout{margin-top:4px}}
+.settings-link>.avatar.sprite{flex:0 0 34px;width:34px}
+.settings-link b{color:var(--ink)}
