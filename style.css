@@ -11,7 +11,7 @@ body{background:#e4e8df;display:flex;justify-content:center}.shell{width:min(390
 
 /* Transparent artwork and predictable text blocks. */
 .sprite{background-color:transparent}
-.collect article{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:12px 3px}
+.collect .dish{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:12px 3px}
 .collect .food-art{display:block;width:80px;height:80px;max-width:100%;margin:0 auto;flex-shrink:0}
 .collect b{display:block;width:100%;text-align:center;white-space:nowrap;font-size:14px;line-height:1.5}
 .collect p{display:block;width:100%;margin:0;text-align:center;font-size:14px;line-height:1.65;word-break:keep-all;overflow-wrap:normal}

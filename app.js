@@ -13,9 +13,8 @@ const defaults={demoSeeded:true,points:120,rice:0,minutes:165,connections:['aya'
 const ONLINE='オンライン';
 const sfcPlaces=['Μ館 メディアセンター','Σ館 鴨池ラウンジ','学生ラウンジ（鴨池テラス）','κ館','ε館','ι館','ο館','λ館','Θ館','Δ館','Ω館','Α館（本館）'];
 const people={aya:{name:'あや',avatar:1,department:'総合政策学部',year:'1年生'},riku:{name:'りく',avatar:0,department:'環境情報学部',year:'1年生'},ken:{name:'けん',avatar:2,department:'環境情報学部',year:'2年生'},mio:{name:'みお',avatar:3,department:'看護医療学部',year:'1年生'}};
-// 作業場（お試し用）：cycle 分ごとに minutes 分の回がくり返される。時刻から今の回を計算するので保存しない
-const roomTemplates=[{key:'aya',host:'aya',dayOnly:true,type:'レポート',title:'レポートを書く会',place:'Μ館 メディアセンター',minutes:25,cycle:30,offset:0,capacity:4,mark:'窓側の席・赤いトートバッグ',members:[['aya','政策分析のレポート'],['mio','看護学概論のレポート']]},{key:'riku',host:'riku',type:'語学',title:'英単語もくもく',place:'学生ラウンジ（鴨池テラス）',minutes:15,cycle:20,offset:7,capacity:4,mark:'青いパーカー・英単語帳',members:[['riku','英単語を100個']]},{key:'ken',host:'ken',type:'試験対策',title:'過去問を解く',place:'κ館',minutes:50,cycle:60,offset:20,capacity:4,mark:'黄色いノートPCケース',members:[['ken','線形代数の過去問']]},{key:'mio',host:'mio',nightOnly:true,type:'勉強',title:'夜のもくもく会',place:'オンライン',minutes:25,cycle:30,offset:10,capacity:6,members:[['mio','看護学のノートまとめ'],['aya','英語のリーディング']]}];
-// 自分の作業場に来る人：場所と時間帯で変える（夜のオンラインはみお、鴨池まわりはりく、メディアセンターはあや、それ以外はけん）
+const demoRooms=false;
+const roomTemplates=[{key:'aya',host:'aya',dayOnly:true,type:'レポート',title:'レポートを書く会',place:'Μ館 メディアセンター',minutes:25,cycle:30,offset:0,capacity:4,mark:'窓側の席・赤いトートバッグ',members:[['aya','政策分析のレポート'],['mio','看護学概論のレポート']]},{key:'riku',host:'riku',type:'語学',title:'英単語もくもく',place:'学生ラウンジ（鴨池テラス）',minutes:15,cycle:20,offset:7,capacity:4,mark:'青いパーカー・英単語帳',members:[['riku','英単語を100個']]},{key:'ken',host:'ken',type:'試験対策',title:'過去問を解く',place:'κ館',minutes:50,cycle:60,offset:20,capacity:4,mark:'黄色いノートPCケース',members:[['ken','線形代数的過去問']]},{key:'mio',host:'mio',nightOnly:true,type:'勉強',title:'夜のもくもく会',place:'オンライン',minutes:25,cycle:30,offset:10,capacity:6,members:[['mio','看護学のノートまとめ'],['aya','英語のリーディング']]}];
 const guestTasks={aya:'レポートの見直し',riku:'英語の予習',ken:'プログラミング課題',mio:'看護学のノートまとめ'};
 function pickGuest(place){const night=skyKind()==='night',k=place===ONLINE?(night?'mio':'riku'):/鴨池/.test(place)?'riku':/メディアセンター/.test(place)?(night?'ken':'aya'):'ken';return [k,guestTasks[k]]}
 // 自分の作業場に来る人：選んだ人数まで、場所に合う人から順に（20秒おき）
@@ -38,22 +37,27 @@ function normalizeState(){
  state.completedTaskIds ||= state.tasks.filter(t=>t.done||t.rewarded).map(t=>t.id);
  state.profile={name:'田中ハク',university:'HACK大学',department:'',year:'1年生',avatar:0,...state.profile};if(state.profile.university==='慶應義塾大学 SFC')state.profile.university='HACK大学';if(state.profile.name==='しまの りゅうせい')state.profile.name='田中ハク';if(state.profile.university==='たんぼる大学')state.profile.university='慶應義塾大学 SFC';
  if(![...sfcPlaces,ONLINE].includes(state.roomPlace))state.roomPlace=sfcPlaces[0];
- state.settings={hideCompleted:false,vibrate:true,sound:false,notify:false,...state.settings};delete state.settings.focusLock;
+ state.settings={hideCompleted:false,vibrate:true,sound:false,notify:false,...state.settings};
+ state.pantry={...state.pantry};
+ state.history ||= {};
+ if(!state.cooked){state.cooked={};Object.entries({onigiri:3,curry:6,omurice:9}).forEach(([k,n])=>{if(state.rice>=n)state.cooked[k]=1})}delete state.settings.focusLock;
  state.connections=[...new Set((state.connections||[]).map(c=>typeof c==='number'?({1:'aya',2:'riku',3:'ken'})[c]:c).filter(c=>people[c]))];
 }
+Object.assign(people,state.sharedPeople);
 normalizeState();
 let loginStep='welcome',friendView='rooms',mapSelected=null,customTime=false,customSeats=false;
 let page='home',duration=state.duration||25,remaining=(state.duration||25)*60,deadline=null,running=false,selectedDate=todayISO,month=new Date(today.getFullYear(),today.getMonth(),1),taskPage=0,taskFit=5,homeFit=4;
 let saveFailed=false,sessionId=null,sessionTask=null,roomsKey='',wakeLock=null,audioCtx=null;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function save(){state.timer={duration,remaining,deadline,running,sessionId,sessionTask};try{localStorage.setItem('tanboru-v1',JSON.stringify(state));if(saveFailed){saveFailed=false;$('#toast').classList.remove('show');$('#toast').classList.remove('save-error')}return true}catch{saveFailed=true;clearTimeout(window.toastTimer);const el=$('#toast');el.innerHTML='<span>変更を保存できませんでした。再読み込みせず、もう一度お試しください。</span><div><button id="retrySave">再試行</button><button id="dismissSaveError" aria-label="通知を閉じる">×</button></div>';el.classList.add('save-error');el.classList.add('show');el.setAttribute?.('role','alert');return false}}
-// 文の長さに合わせて表示時間を延ばす（最長4秒）。pic を渡すと小さなイラストを添える
 function toast(s,pic){if(saveFailed)return;const el=$('#toast');el.innerHTML=(pic&&suppliedAssets[pic]?`<img class="toast-art" src="${suppliedAssets[pic]}" alt="">`:'')+`<span>${esc(s)}</span>`;el.classList.remove('save-error');el.setAttribute?.('role','status');el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),Math.min(4000,1200+String(s).length*70))}
 function homeTasks(){return state.tasks.filter(t=>t.date===todayISO||(!t.done&&t.date<todayISO))}
 const menus=[['home','ホーム'],['tasks','タスク'],['friends','仲間'],['profile','マイページ']];
-// 図鑑の料理（お米の量で解放）
-const dishes=[['おにぎり',3],['カレーライス',6],['オムライス',9]];
-function collectRate(){const got=dishes.filter(([,r])=>state.rice>=r).length,pct=Math.round(got/dishes.length*100);return `<div class="collect-rate"><div class="between"><b>コレクション ${got} / ${dishes.length}</b><span>${pct}%</span></div><div class="progress collect-progress"><div style="width:${pct}%"></div></div></div>`}
+const ingredients={salmon:{name:'さけ',emoji:'🐟',price:30},carrot:{name:'にんじん',emoji:'🥕',price:20},potato:{name:'じゃがいも',emoji:'🥔',price:20},onion:{name:'たまねぎ',emoji:'🧅',price:20},egg:{name:'たまご',emoji:'🥚',price:20},tomato:{name:'トマト',emoji:'🍅',price:30},shrimp:{name:'えび',emoji:'🦐',price:30},chicken:{name:'とりにく',emoji:'🍗',price:30}};
+const recipes=[{key:'tkg',name:'たまごかけごはん',emoji:'🍚',rice:1,items:{egg:1}},{key:'onigiri',name:'おにぎり',sprite:8,rice:1,items:{salmon:1}},{key:'curry',name:'カレーライス',sprite:9,rice:2,items:{carrot:1,potato:1,onion:1}},{key:'omurice',name:'オムライス',sprite:10,rice:2,items:{egg:2,tomato:1,onion:1}},{key:'sushi',name:'おすし',emoji:'🍣',rice:2,items:{salmon:2}},{key:'tendon',name:'えび天丼',emoji:'🍤',rice:2,items:{shrimp:2,egg:1}},{key:'bento',name:'おべんとう',emoji:'🍱',rice:2,items:{chicken:1,egg:1,carrot:1}}];
+const dishArt=(r,cls='')=>r.sprite?`<div class="food-art sprite s${r.sprite} ${cls}" role="img" aria-label="${r.name}"></div>`:`<div class="food-art food-emoji ${cls}" role="img" aria-label="${r.name}">${r.emoji}</div>`;
+const cookedCount=()=>recipes.filter(r=>state.cooked[r.key]).length;
+function collectRate(){const got=cookedCount(),pct=Math.round(got/recipes.length*100);return `<div class="collect-rate"><div class="between"><b>コレクション ${got} / ${recipes.length}</b><span>${pct}%</span></div><div class="progress collect-progress"><div style="width:${pct}%"></div></div></div>`}
 function stage(){return state.points>=300?'収穫のとき':state.points>=200?'実りの時期':state.points>=100?'すくすく期':'田植えの時期'}
 function farm(){const level=Math.min(6,Math.floor(state.points/60)+1);const rice='rice_stage_0'+level;const places=[[50,27],[44,32],[56,33],[25,46],[20,51],[31,52],[73,46],[68,51],[79,52],[49,65],[43,70],[55,71]];const sky=skyKind(),w=freshWeather();return `<div class="farmart supplied-field sky-${sky}" role="img" aria-label="${stage()}の田んぼ"><div class="field-land"></div>${w?`<span class="weather-chip">HACK大学 ${weatherLabel(w.code)} ${w.temp}℃</span>`:''}${sky==='clear'&&(!w||w.code<=1)?art('sun','field-sun'):''}<div class="paddy-scene">${art('paddy_4_plots','field-paddy')}${places.map(([x,y])=>`<img class="field-rice" src="${suppliedAssets[rice]}" alt="" style="left:${x}%;top:${y}%">`).join('')}</div>${art('students_study_02','field-students')}${art('rice_mascot_normal','field-mascot')}${art('bush','field-bush')}${art('flower','field-flower')}</div>`}
 function head(title){return `<div class="heading"><div><h1>${title}</h1></div></div>`}
@@ -87,10 +91,8 @@ setInterval(()=>{if(pendingRender&&!typing()){pendingRender=false;render()}refre
 initializePersistentData();
 render();
 tickTimer();
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){fetchWeather();requestWakeLock();refreshDay();tickTimer()}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){fetchCampusWeather();requestWakeLock();refreshDay();tickTimer()}});
 window.addEventListener?.('focus',()=>{refreshDay();tickTimer()});
-
-
 
 function openProfileEditor(){const p=state.profile;modal(`<h2>プロフィールを編集</h2><form id="profileForm"><fieldset class="avatar-options"><legend>アイコン</legend>${[0,1,2,3].map(n=>`<label><input type="radio" name="avatar" value="${n}" ${p.avatar===n?'checked':''} aria-label="アイコン${n+1}"><span class="avatar sprite s${n}"></span></label>`).join('')}</fieldset><label>名前<input name="name" maxlength="30" required value="${esc(p.name)}"></label><label>大学<input name="university" maxlength="60" required value="${esc(p.university)}"></label><label>学部<select name="department">${['','総合政策学部','環境情報学部','看護医療学部'].map(d=>`<option value="${d}" ${p.department===d?'selected':''}>${d||'選ばない'}</option>`).join('')}${p.department&&!['総合政策学部','環境情報学部','看護医療学部'].includes(p.department)?`<option selected>${esc(p.department)}</option>`:''}</select></label><label>学年<select name="year">${['1年生','2年生','3年生','4年生','5年生','6年生','大学院生','その他'].map(y=>`<option ${y===p.year?'selected':''}>${y}</option>`).join('')}</select></label><p class="form-error" id="profileError" role="alert"></p><button class="primary icon-btn" aria-label="プロフィールを保存" title="保存">${icon('check')}</button></form>`);
 $('#profileForm').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target),name=f.get('name').trim(),university=f.get('university').trim(),avatar=Number(f.get('avatar'));if(!name||!university){$('#profileError').textContent='名前と大学を入力してください。';return}if(![0,1,2,3].includes(avatar))return;state.profile={name,university,department:f.get('department').trim(),year:f.get('year'),avatar};save();$('#modal').close();render();toast('プロフィールを保存しました')};}
@@ -116,7 +118,6 @@ function initializePersistentData(){
  const close=document.querySelector('#modal .close');if(close)close.innerHTML=icon('close');
 }
 function restoreTimer(){const t=state.timer;if(t&&Number.isInteger(t.duration)&&t.duration>=1&&t.duration<=180){duration=t.duration;remaining=Number.isFinite(t.remaining)?Math.max(0,Math.min(t.remaining,duration*60)):duration*60;running=!!t.running&&Number.isFinite(t.deadline);deadline=running?t.deadline:null;sessionId=t.sessionId||null;sessionTask=t.sessionTask??null;if(running)remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000))}if(running&&!state.room)state.room={mine:true,host:'me',title:'自由に集中',type:'勉強',endAt:deadline,joinedAt:deadline-duration*60000,joinAt:deadline+1};if(!running)state.room=null}
-// 別のタブで変更されたら、こちらの表示も最新にする
 window.addEventListener?.('storage',e=>{if(e.key!=='tanboru-v1'||!e.newValue)return;try{state=JSON.parse(e.newValue)}catch{return}normalizeState();restoreTimer();render()});
 function refreshDay(){const now=new Date(),next=iso(now);if(next===todayISO)return false;const previous=todayISO;today=now;todayISO=next;state.tasks.forEach(t=>{if(t.demo&&!t.done)t.date=next});save();if(selectedDate===previous){selectedDate=next;month=new Date(now.getFullYear(),now.getMonth(),1)}taskPage=0;render();return true}
 function tickTimer(){if(!running)return;remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000));if($('#time'))$('#time').textContent=timeText();if($('#quicktime'))$('#quicktime').textContent=timeText();if(remaining>0){roomTick();return}const doneAt=Date.now(),room=state.room,others=room?roomMembers(room):[],earned=room?Math.max(1,Math.round((room.endAt-room.joinedAt)/60000)):duration,bonus=others.length?10:0,task=state.tasks.find(t=>String(t.id)===String(sessionTask));running=false;deadline=null;remaining=duration*60;if(!sessionId||state.lastCompletedSession!==sessionId){state.points+=earned*2+bonus;state.minutes+=earned;state.lastCompletedSession=sessionId;if(task)task.focusMinutes=(task.focusMinutes||0)+earned;state.recentTogether=[...new Set([...others.map(o=>o[0]),...state.recentTogether])].slice(0,6);state.roomHistory=[{at:doneAt,place:room?.place||'',minutes:earned,task:task?.title||'',with:others.map(o=>o[0])},...state.roomHistory].slice(0,120)}sessionId=null;sessionTask=null;state.room=null;releaseWakeLock();save();render();alertDone(earned,task);const newFriends=others.map(o=>o[0]).filter(k=>!state.connections.includes(k));modal(`<h2>みんなで${earned}分、やりきった！</h2>${others.length&&!newFriends.length?`<div class="done-faces">${['me',...others.map(o=>o[0])].map(k=>`<span class="avatar sprite s${k==='me'?state.profile.avatar:people[k].avatar}"></span>`).join('')}</div>`:`<img class="result-art asset-img" src="assets/library/focus_complete.webp" alt="集中完了">`}${task?`<p class="focus-result-task">${esc(task.title)}</p>`:''}<p class="done-points">+${earned*2+bonus} pt${bonus?'<span>いっしょに +10</span>':''}</p>${newFriends.length?`<div class="befriend-row">${newFriends.map(k=>`<button class="befriend" data-befriend="${k}" aria-label="${esc(people[k].name)}さんを仲間に追加"><span class="avatar sprite s${people[k].avatar}"></span><span class="befriend-badge">${icon('plus')}</span><small>${esc(people[k].name)}</small></button>`).join('')}</div>`:''}${photoButton(doneAt,task&&!task.done?task.id:'')}${task&&!task.done?`<button class="primary" data-complete-task="${task.id}">タスクを完了にする</button><button class="textbtn closemodal" data-page="home">あとで</button>`:'<button class="primary closemodal" data-page="home">田んぼへ戻る</button>'}`)}
@@ -124,11 +125,9 @@ function tickTimer(){if(!running)return;remaining=Math.max(0,Math.ceil((deadline
 function prepareAlerts(){if(!state.settings.sound)return;try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume?.()}catch{}}
 function chime(){if(!audioCtx)return;try{const t=audioCtx.currentTime;[784,988,1175].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0.0001,t+i*.18);g.gain.exponentialRampToValueAtTime(.25,t+i*.18+.02);g.gain.exponentialRampToValueAtTime(.0001,t+i*.18+.5);o.connect(g).connect(audioCtx.destination);o.start(t+i*.18);o.stop(t+i*.18+.55)})}catch{}}
 function alertDone(earned,task){if(state.settings.vibrate)navigator.vibrate?.([200,120,200]);if(state.settings.sound)chime();if(state.settings.notify&&document.hidden&&'Notification' in window&&Notification.permission==='granted'){try{new Notification('たんぼる',{body:`${earned}分の集中が終わりました${task?'：'+task.title:''}`,icon:'assets/icons/icon-192.png'})}catch{}}}
-// 集中中は画面が消えないようにする（対応ブラウザのみ）
 async function requestWakeLock(){try{if(running&&!wakeLock&&navigator.wakeLock&&!document.hidden){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null})}}catch{wakeLock=null}}
 function releaseWakeLock(){wakeLock?.release?.().catch?.(()=>{});wakeLock=null}
 
-// ===== 作業場 =====
 const hhmm=t=>new Date(t).toTimeString().slice(0,5);
 function roomNow(t,now=Date.now()){const c=t.cycle*60000,o=t.offset*60000,startAt=Math.floor((now-o)/c)*c+o,endAt=startAt+t.minutes*60000;return {...t,startAt,endAt,live:now<endAt,left:Math.ceil((endAt-now)/60000)}}
 // 自分の作業場に入ってきた人は、元の作業場からいなくなる
@@ -166,8 +165,7 @@ function roomTick(){const r=state.room;if(!r)return;const now=Date.now();if(r.mi
 function riceFor(r){const p=Math.max(0,Math.min(1,(Date.now()-r.joinedAt)/Math.max(1,r.endAt-r.joinedAt)));return 'rice_stage_0'+Math.min(6,1+Math.floor(p*6))}
 function refreshRooms(){if(running||page!=='friends'&&page!=='home')return;const key=liveRooms().map(r=>r.key+r.live+r.left).join('|');if(key===roomsKey)return;roomsKey=key;if(!$('#modal').open&&!typing()&&(page==='home'||friendView==='rooms'))render()}
 
-// ===== 天気と時間帯でホームの空を変える（SFC の現在の天気：Open-Meteo、登録不要） =====
-const SFC_WEATHER_URL='https://api.open-meteo.com/v1/forecast?latitude=35.3881&longitude=139.4272&current=weather_code,is_day,temperature_2m&timezone=Asia%2FTokyo';
+// 天気＆位置情報連動ボーナス
 let skyShown='';
 function freshWeather(){const w=state.weather;return w&&Date.now()-w.at<3*3600000?w:null}
 function isWet(c){return (c>=51&&c<=67)||(c>=71&&c<=86)||c>=95}
