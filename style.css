@@ -379,3 +379,45 @@ body[data-page="home"][data-sky="night"] .heading h1{color:#fffdf2}
 .map-detail .textbtn.icon-btn{margin-left:auto}
 .map-blob{width:min(76px,9.5vh);height:min(76px,9.5vh)}.map-node.me .map-blob{width:min(92px,11.5vh);height:min(92px,11.5vh)}
 @media(max-height:740px){.map-head p{display:none}.map-card{padding:10px 14px 6px}.map-detail{flex-wrap:nowrap;padding:8px 12px}.map-detail>.avatar.sprite{width:42px;height:42px}.map-detail .primary{flex:0 0 auto;margin:0;padding:9px 12px}.map-detail-copy small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.map-blob{width:8vh;height:8vh}.map-node.me .map-blob{width:9.5vh;height:9.5vh}}
+
+/* 通知のイラスト */
+#toast{display:flex;align-items:center;justify-content:center;gap:8px}
+.toast-art{width:26px;height:26px;object-fit:contain;flex-shrink:0}
+/* 作業場：目印・着いた・その他の時間・稲の成長 */
+.room-mark-input{display:block;width:100%;height:40px;margin-top:8px;padding:0 12px;border:0;border-radius:12px;background:#f1f2e6;font:inherit;font-size:14px;color:var(--ink)}
+.room-mark{margin:0;font-size:14px;color:#6b5a1e;background:#fff7d6;border-radius:10px;padding:3px 8px;width:fit-content}
+.room-custom.selected input{background:#fffefa;box-shadow:0 2px 6px #25452a12;color:#177b52;font-weight:700}
+.room-members .room-member{align-items:center}
+.arrived-btn{margin-left:auto;min-width:0;padding:8px 14px;border-radius:18px;font-size:14px;flex-shrink:0}
+.room-members .cheer{margin-left:auto;width:30px;height:30px;object-fit:contain;flex-shrink:0}
+.room-grow{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:auto}
+.room-rice{width:auto;height:min(96px,12vh);object-fit:contain}
+.room-grow small{font-size:14px;color:#5f6f56}
+.room-note{margin:4px 0 0}
+/* 仲間：人ごとの記録 */
+.map-detail-copy{display:block;padding:0;border:0;background:none;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.together-history{text-align:center}
+.together-history>.avatar.sprite{width:64px;height:64px}
+.together-history h2{margin:8px 0 2px}
+.together-history ul{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;text-align:left;max-height:46vh;overflow-y:auto}
+.together-history li{display:flex;flex-direction:column;gap:3px;padding:10px 12px;border-radius:12px;background:#f6f6ec}
+.together-history li small{font-size:14px;color:var(--muted)}
+.room-online-note{display:block;margin:8px 0 0;font-size:14px;color:#3d5a3f;background:#e8edd9;border-radius:10px;padding:6px 10px}
+.room-live .room-online-note{margin:0;text-align:center}
+/* 仲間追加は顔＋「＋」だけ */
+.befriend-row{display:flex;justify-content:center;gap:18px;margin:14px 0 4px}
+.befriend-row .befriend{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;width:auto;margin:0;padding:0;border:0;background:none;font:inherit;color:var(--ink);cursor:pointer}
+.befriend-row .befriend .avatar.sprite{width:60px;height:60px}
+.befriend-row .befriend small{font-size:14px;font-weight:700}
+.befriend-badge{position:absolute;top:38px;right:-6px;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#188358;color:#fffef8;box-shadow:0 0 0 3px #fffef8}
+.befriend-badge .ui-icon{width:16px;height:16px;stroke-width:2.6}
+.befriend-row .befriend.done{cursor:default;opacity:1}
+.befriend-row .befriend.done .befriend-badge{background:#f3ca45;color:#254b32}
+.map-detail .primary.map-add,.together-history .primary.map-add{flex:0 0 auto;width:44px;height:44px;min-width:44px;margin:0 0 0 auto;padding:0;border-radius:50%}
+.together-history .primary.map-add{margin:14px auto 0;display:flex}
+.room-live-head .pill{width:fit-content}
+.room-members .cheer{width:36px;height:36px}
+.focus-result-task{font-size:14px;font-weight:400;color:#5f6f56;text-align:center}
+.done-points{display:flex;align-items:center;justify-content:center;gap:8px;margin:4px 0;font-size:24px;font-weight:800;color:#137b4e}
+.done-points span{font-size:14px;padding:2px 8px;border-radius:12px;background:#fff7d6;color:#5b4a14}
+@media(max-height:740px){.room-mark-input{height:34px;margin-top:6px}.room-select select{height:38px}.room-select>svg{top:9px}.room-place>.ui-icon{top:10px}.room-row{padding:5px 12px}.room-online-note{margin-top:6px;padding:4px 10px}}
