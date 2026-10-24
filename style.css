@@ -486,3 +486,8 @@ button.member-tile:active .avatar{transform:scale(.95)}
 .member-tile .avatar.sprite::after{content:'';position:absolute;inset:-6px;background:url('assets/library/frame_green.webp') center/100% 100% no-repeat;pointer-events:none}
 .member-tile.me .avatar.sprite::after{background-image:url('assets/library/frame_yellow.webp')}
 .member-tile .avatar.sprite{overflow:visible}
+/* アイコンを枠の内側にぴったり合わせる（緑の穴82.5%・黄の穴79%より少しだけ大きく） */
+.map-blob .avatar.sprite{width:84%;height:84%}
+.map-node.me .map-blob .avatar.sprite,.map-node.selected .map-blob .avatar.sprite{width:80.5%;height:80.5%}
+.member-tile .avatar.sprite::after{inset:-6px}
+.member-tile.me .avatar.sprite::after{inset:-7.5px}
