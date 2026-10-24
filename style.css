@@ -378,7 +378,7 @@ body[data-page="home"][data-sky="night"] .heading h1{color:#fffdf2}
 .map-detail .primary,.map-detail .primary{flex:1 0 100%;margin-top:2px}
 .map-detail .textbtn.icon-btn{margin-left:auto}
 .map-blob{width:min(76px,9.5vh);height:min(76px,9.5vh)}.map-node.me .map-blob{width:min(92px,11.5vh);height:min(92px,11.5vh)}
-@media(max-height:740px){.map-head p{display:none}.map-card{padding:10px 14px 6px}.map-detail{flex-wrap:nowrap;padding:8px 12px}.map-detail>.avatar.sprite{width:42px;height:42px}.map-detail .primary{flex:0 0 auto;margin:0;padding:9px 12px}.map-detail-copy small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.map-blob{width:8vh;height:8vh}.map-node.me .map-blob{width:9.5vh;height:9.5vh}}
+@media(max-height:740px){.map-head p{display:none}.map-card{padding:10px 14px 6px}.map-detail{padding:8px 12px}.map-detail>.avatar.sprite{width:42px;height:42px}.map-detail .primary{padding:9px 12px}.map-blob{width:8vh;height:8vh}.map-node.me .map-blob{width:9.5vh;height:9.5vh}}
 
 /* 通知のイラスト */
 #toast{display:flex;align-items:center;justify-content:center;gap:8px}
@@ -587,3 +587,12 @@ body:not([data-page="home"]):not([data-page="login"]) .heading h1{color:#188358;
 /* 背の低い画面のタスク画面：タイトルとカレンダーを少し詰める。それでも足りなければスクロール */
 @media(max-height:640px){body:not([data-page="home"]):not([data-page="login"]) .heading h1{font-size:20px}body:not([data-page="home"]):not([data-page="login"]) .heading{padding-top:2px}[data-page="tasks"] .day{min-height:22px!important;padding:2px!important}[data-page="tasks"] .calendar{gap:3px}[data-page="tasks"] .day-record-btn{margin:4px 0 0;padding:6px 12px}}
 #main.fit-scroll{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
+
+/* つながりマップの下のカード：名前や学年が縦に割れないように（上段：顔・名前・状態、下段：ボタン） */
+.map-detail{flex-wrap:wrap;gap:8px 12px}
+.map-detail-copy{flex:1 1 0;min-width:0}
+.map-detail-copy b{white-space:nowrap}
+.map-detail-copy small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map-year{flex-shrink:0;white-space:nowrap}
+.map-now{white-space:nowrap}
+.map-detail .primary{flex:1 0 100%;margin:0;min-height:42px}
