@@ -5,7 +5,10 @@ function icon(name){if(name==='portrait')return `<span class="ui-icon avatar spr
 const $=s=>document.querySelector(s),main=$('#main');
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 let today=new Date(),todayISO=iso(today);
-const defaults={points:120,rice:0,minutes:0,sessions:0,tasks:[{id:1,title:'レポートの下書きを仕上げる',date:todayISO,subject:'心理学概論',done:false,demo:true},{id:2,title:'英語の課題 Unit 3',date:todayISO,subject:'英語コミュニケーション',done:false,demo:true},{id:3,title:'ゼミの発表テーマを考える',date:todayISO,subject:'基礎ゼミ',done:false,demo:true},{id:4,title:'履修登録を確認する',date:todayISO,subject:'大学生活',done:true,demo:true}]};
+// デモ用：初めて開いたときから、水路でつながった仲間と、いっしょに集中した記録が入っている
+const daysAgo=(d,h)=>{const t=new Date();t.setDate(t.getDate()-d);t.setHours(h,0,0,0);return t.getTime()};
+const demoHistory=[{at:daysAgo(1,15),place:'Μ館 メディアセンター',minutes:25,task:'レポートの下書きを仕上げる',with:['aya','mio']},{at:daysAgo(2,13),place:'学生ラウンジ（鴨池テラス）',minutes:15,task:'英語の課題 Unit 3',with:['riku']},{at:daysAgo(3,16),place:'Μ館 メディアセンター',minutes:25,task:'ゼミの発表テーマを考える',with:['aya']},{at:daysAgo(4,21),place:'オンライン',minutes:25,task:'英語の課題 Unit 3',with:['riku']},{at:daysAgo(5,10),place:'κ館',minutes:50,task:'レポートの下書きを仕上げる',with:['ken']},{at:daysAgo(6,14),place:'Μ館 メディアセンター',minutes:25,task:'',with:['aya']}];
+const defaults={points:120,rice:0,minutes:165,sessions:6,connections:['aya','riku','ken'],recentTogether:['aya','mio','riku','ken'],roomHistory:demoHistory,tasks:[{id:1,title:'レポートの下書きを仕上げる',date:todayISO,subject:'心理学概論',done:false,demo:true},{id:2,title:'英語の課題 Unit 3',date:todayISO,subject:'英語コミュニケーション',done:false,demo:true},{id:3,title:'ゼミの発表テーマを考える',date:todayISO,subject:'基礎ゼミ',done:false,demo:true},{id:4,title:'履修登録を確認する',date:todayISO,subject:'大学生活',done:true,demo:true}]};
 // 慶應義塾 湘南藤沢キャンパス（SFC）で実際に会う想定。建物名は公式キャンパスマップ（keio.ac.jp/ja/about/campus/sfc/map/）より
 const ONLINE='オンライン';
 const sfcPlaces=['Μ館 メディアセンター','Σ館 鴨池ラウンジ','学生ラウンジ（鴨池テラス）','κ館','ε館','ι館','ο館','λ館','Θ館','Δ館','Ω館','Α館（本館）'];
