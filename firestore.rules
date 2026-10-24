@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function validUser() {
+      return request.resource.data.keys().hasOnly(['name','avatar','department','year','university','createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 30
+        && request.resource.data.avatar is int && request.resource.data.avatar >= 0 && request.resource.data.avatar <= 3
+        && request.resource.data.department is string && request.resource.data.department.size() <= 60
+        && request.resource.data.year is string && request.resource.data.year.size() <= 20
+        && request.resource.data.university is string && request.resource.data.university.size() <= 60
+        && request.resource.data.createdAt is int;
+    }
+    match /users/{userId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && validUser();
+      allow update: if signedIn() && validUser()
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if false;
+    }
+    match /user_states/{userId} {
+      allow read: if signedIn();
+      allow create, update: if signedIn()
+        && request.resource.data.keys().hasOnly(['data','updatedAt','source'])
+        && request.resource.data.data is map
+        && request.resource.data.updatedAt is int
+        && request.resource.data.source is string && request.resource.data.source.size() <= 40;
+      allow delete: if false;
+    }
+    match /rooms/{roomId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['hostId','hostName','avatar','title','place','meetingMark','capacity','startAt','endAt','members','createdAt','closedAt'])
+        && request.resource.data.hostId is string
+        && request.resource.data.hostName is string && request.resource.data.hostName.size() <= 30
+        && request.resource.data.avatar is int && request.resource.data.avatar >= 0 && request.resource.data.avatar <= 3
+        && request.resource.data.title is string && request.resource.data.title.size() <= 80
+        && request.resource.data.place is string && request.resource.data.place.size() <= 80
+        && request.resource.data.meetingMark is string && request.resource.data.meetingMark.size() <= 30
+        && request.resource.data.capacity is int && request.resource.data.capacity >= 2 && request.resource.data.capacity <= 10
+        && request.resource.data.startAt is int && request.resource.data.endAt is int
+        && request.resource.data.endAt > request.resource.data.startAt
+        && request.resource.data.endAt <= request.resource.data.startAt + 10800000
+        && request.resource.data.members is map && request.resource.data.members.size() == 0
+        && request.resource.data.closedAt == null;
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['members','closedAt'])
+        && request.resource.data.members is map
+        && request.resource.data.members.size() <= 100
+        && (request.resource.data.closedAt == null || request.resource.data.closedAt is int);
+      allow delete: if false;
+      match /reactions/{reactionId} {
+        allow read: if signedIn();
+        allow create: if signedIn()
+          && exists(/databases/$(database)/documents/rooms/$(roomId))
+          && request.resource.data.keys().hasOnly(['fromId','toId','kind','at'])
+          && request.resource.data.fromId is string
+          && (request.resource.data.toId == null || request.resource.data.toId is string)
+          && request.resource.data.kind in ['拍手','がんばろう','いいね','あと少し','おつかれ']
+          && request.resource.data.at is int;
+        allow update, delete: if false;
+      }
+    }
+  }
+}
