@@ -731,3 +731,11 @@ nav .nav-profile{display:flex!important;align-items:center;justify-content:cente
 .day-jump{padding:0;background:none;color:inherit;font:inherit;text-align:left;border-radius:0}
 /* マイページの数字（単位も）は緑 */
 .stats strong,.stats strong small{color:var(--green)}
+/* 選んでいるものは、下メニューと同じ黄色にそろえる */
+.friend-views button.selected,.room-times>button.selected,.room-custom.selected input{background:#f6cf57;color:var(--ink);font-weight:700;box-shadow:none}
+.calendar .day.chosen:not(.is-today){background:#f6cf57;box-shadow:none;color:var(--ink)}
+/* 人のポップアップ：追加は「＋」、外すは下の小さなリンク */
+.person-detail .person-add{display:flex;margin:14px auto 0}
+.person-remove{display:block;margin:16px auto 0;padding:8px 14px;background:none;color:var(--muted);font-size:14px;border-radius:12px}.person-remove:hover{background:#f1f2e6}
+/* ダイアログの × はアイコン */
+#modal .close{display:flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;right:10px;top:8px;border-radius:50%;color:var(--ink)}#modal .close .ui-icon{width:22px;height:22px}
