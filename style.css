@@ -852,3 +852,9 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 #main .room-row .room-faces{width:50px;overflow:hidden}
 #main .room-row .room-faces .avatar.sprite{width:30px;height:30px;margin-left:-12px}
 #main .room-row .room-faces .avatar.sprite:first-child{margin-left:0}
+/* ホーム：「みんなと集中する」の帯は黄色（下メニュー・がんばりレポートと同じ --yellow） */
+:root{--focus-band:var(--yellow)}
+[data-page="home"] .quickfocus small{color:var(--brown)}
+/* がんばりレポート：黄色の上の文字とアイコンは黒（本文の色）、影なし */
+.day-record-btn,.day-record-btn.empty{color:var(--ink);text-shadow:none}
+.day-record-btn .ui-icon{color:var(--ink);filter:none}
