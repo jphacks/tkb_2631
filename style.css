@@ -710,3 +710,10 @@ body:not([data-page="home"]):not([data-page="login"]) .heading{padding-left:6px}
  [data-page="home"] .supplied-field .field-hill{top:21%;right:-22%}
  [data-page="home"] .field-land{top:31%}
 }
+/* いちばん下の要素と下のメニューの間に、必ず余白を取る */
+main{padding-bottom:14px}
+[data-page="home"] .lowgrid{padding-bottom:14px}
+.pager{margin-bottom:2px}
+@media(max-height:700px){main{padding-bottom:12px}[data-page="home"] .lowgrid{padding-bottom:12px}}
+/* 山は薄い緑の地面のうしろに置く */
+[data-page="home"] .supplied-field .field-mountain{z-index:-1}
