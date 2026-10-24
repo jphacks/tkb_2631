@@ -858,3 +858,6 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 /* がんばりレポート：黄色の上の文字とアイコンは黒（本文の色）、影なし */
 .day-record-btn,.day-record-btn.empty{color:var(--ink);text-shadow:none}
 .day-record-btn .ui-icon{color:var(--ink);filter:none}
+/* がんばりレポート：元の薄緑（--tint）に戻す。文字とアイコンは黒（記録があってもなくても同じ） */
+.day-record-btn,.day-record-btn.empty{background:var(--tint);color:var(--ink);text-shadow:none}
+.day-record-btn .ui-icon{color:var(--ink);filter:none}
