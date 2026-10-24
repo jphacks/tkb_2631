@@ -673,3 +673,4 @@ body:not([data-page="home"]):not([data-page="login"]) .heading{padding-left:6px}
  [data-page="home"] .supplied-field .field-sun{top:4%;right:5%;width:16%;height:16%}
 }
 @media(max-height:700px){[data-page="home"] .supplied-field .field-students{display:none}[data-page="home"] .supplied-field .field-mascot{left:auto;right:4%;bottom:29%}}
+.month-heading{display:flex;align-items:center;justify-content:center}
