@@ -838,3 +838,10 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 .map-detail .friend-add.map-add,.together-history .friend-add.map-add{flex:0 0 auto;width:42px;height:42px;min-width:42px;min-height:42px;padding:0;border-radius:50%;margin:0 0 0 auto}
 .together-history .friend-add.map-add{margin:14px auto 0;display:flex}
 .map-detail .friend-add.map-add .ui-icon,.together-history .friend-add.map-add .ui-icon{width:22px;height:22px}
+/* 仲間に追加：濃いめの黄色に白い文字（白との差 3.1:1。薄い黄色だと白が読めないため） */
+:root{--yellow-strong:#c4860b}
+.friend-add{background:var(--yellow-strong);color:#fffef8}
+.friend-add .ui-icon{color:#fffef8}
+/* がんばりレポート：仲間に追加と同じ濃いめの黄色に白い文字（記録があってもなくても） */
+.day-record-btn,.day-record-btn.empty{background:var(--yellow-strong);color:#fffef8;font-weight:700}
+.day-record-btn .ui-icon{color:#fffef8}
