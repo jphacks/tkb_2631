@@ -729,3 +729,5 @@ nav button.active .nav-art{background:#f6cf57}
 nav .nav-profile{color:#1b865a}
 /* ホーム：山のイラストは出さない */
 [data-page="home"] .supplied-field .field-mountain{display:none!important}
+.task-delete-link{display:flex;align-items:center;justify-content:center;gap:6px;margin:14px auto 0;padding:8px 14px;background:none;color:#b0473b;font-size:14px;border-radius:12px}.task-delete-link .ui-icon{width:18px;height:18px}.task-delete-link:hover{background:#fbe9e4}
+nav .nav-profile{display:flex!important;align-items:center;justify-content:center;padding:3px 15px!important}nav .nav-profile .nav-portrait{width:30px;height:30px;border-radius:50%;flex-shrink:0}
