@@ -674,3 +674,24 @@ body:not([data-page="home"]):not([data-page="login"]) .heading{padding-left:6px}
 }
 @media(max-height:700px){[data-page="home"] .supplied-field .field-students{display:none}[data-page="home"] .supplied-field .field-mascot{left:auto;right:4%;bottom:29%}}
 .month-heading{display:flex;align-items:center;justify-content:center}
+
+/* ホームの進み具合カードは「段階名＋pt＋バー」だけ（「〇〇と育て中」の行はなし） */
+[data-page="home"] .farmbottom{padding:9px 14px 10px}
+[data-page="home"] .farmbottom .progress{margin:7px 0 0}
+/* 背の低い画面：背景（山・学校・二人）は残し、稲と田んぼのずれを直して、田んぼに余裕を持たせる */
+@media(max-height:700px){
+ [data-page="home"] .supplied-field .field-mountain,[data-page="home"] .supplied-field .field-hill,[data-page="home"] .supplied-field .field-university,[data-page="home"] .supplied-field .field-tree,[data-page="home"] .supplied-field .field-students{display:block}
+ [data-page="home"] .supplied-field .paddy-scene>.field-paddy{top:0;inset:0}
+ [data-page="home"] .field-land{top:33%}
+ [data-page="home"] .paddy-scene{top:25%;left:-6%;width:105%}
+ [data-page="home"] .supplied-field .field-mountain{top:5%}
+ [data-page="home"] .supplied-field .field-hill{top:19%}
+ [data-page="home"] .supplied-field .field-university{top:11%}
+ [data-page="home"] .supplied-field .field-tree{top:24%}
+ [data-page="home"] .supplied-field .field-students{display:block;bottom:19%;right:0;width:30%;height:27%}
+ [data-page="home"] .supplied-field .field-mascot{top:auto;bottom:21%;left:3%;right:auto;width:12%;height:17%}
+ [data-page="home"] .farmbottom{bottom:24px;padding:6px 12px 8px}
+ [data-page="home"] .farmbottom b{font-size:14px}
+ [data-page="home"] .farmbottom .subtle{font-size:14px}
+ [data-page="home"] .farmbottom .progress{margin:4px 0 0;height:6px}
+}
