@@ -634,3 +634,6 @@ input:not([type=checkbox]):not([type=radio]),select,textarea{font-size:16px}
  [data-page="home"] .heading{top:10px}
  [data-page="home"] .weather-chip{top:40px;font-size:14px;padding:3px 8px}
 }
+/* 進み具合のカードが下の白いカードと重ならないように */
+@media(max-height:700px){[data-page="home"] .farmbottom{bottom:30px}[data-page="home"] .quickfocus{margin-top:-12px}}
+[data-page="home"] .farmbottom{box-shadow:0 4px 18px rgba(30,60,35,.08),0 0 0 2px #fffdf2}
