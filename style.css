@@ -491,3 +491,18 @@ button.member-tile:active .avatar{transform:scale(.95)}
 .map-node.me .map-blob .avatar.sprite,.map-node.selected .map-blob .avatar.sprite{width:80.5%;height:80.5%}
 .member-tile .avatar.sprite::after{inset:-6px}
 .member-tile.me .avatar.sprite::after{inset:-7.5px}
+
+/* ===== ログイン画面（黄色ベース） ===== */
+body[data-page="login"]{background:#f7d66b}
+body[data-page="login"] aside{display:none}
+body[data-page="login"] .shell{height:100dvh;background:linear-gradient(180deg,#f9df84 0%,#f6cf57 100%);box-shadow:none}
+body[data-page="login"] main{height:100%;padding:0;background:none}
+.login{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:24px 24px calc(24px + env(safe-area-inset-bottom))}
+.login-logo{width:min(56%,210px);height:auto}
+.login-card{width:100%;max-width:320px;display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:22px;background:#fffef8;box-shadow:0 8px 24px rgba(120,80,0,.12)}
+.login-card label{font-size:14px;font-weight:700;color:#3d4a33}
+.login-card input{margin-top:6px;height:46px;padding:0 14px;border:0;border-radius:12px;background:#f6f3e4;font-size:16px;color:var(--ink)}
+.login-card .form-error{margin:0;min-height:0;font-size:14px;color:#b24a3a}
+.login-card .form-error:empty{display:none}
+.login-btn{height:50px;border-radius:25px;font-size:16px;margin-top:4px}
+.settings-logout{display:block;margin:10px auto 0;font-size:14px}
