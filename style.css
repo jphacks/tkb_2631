@@ -560,3 +560,19 @@ body[data-page="login"] .shell{background:#feda30 url('assets/library/login_bg.w
 .heading h1{font-family:"ab-j-gu",'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;font-weight:400;letter-spacing:.02em}
 /* 使う文字だけ読み込む方式なので、タイトルの文字を最初からページに置いておく（画面には出さない） */
 .title-glyphs{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;font-family:"ab-j-gu",sans-serif}
+
+/* ===== はじめる画面 ===== */
+.welcome{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;padding:0 24px calc(20px + env(safe-area-inset-bottom))}
+.welcome-logo{width:min(64%,250px);height:auto;margin-top:auto}
+.welcome-catch{margin:22px 0 0;text-align:center;font-family:"ab-j-gu",'Hiragino Kaku Gothic ProN',sans-serif;font-size:24px;line-height:1.5;letter-spacing:.06em;color:#111}
+.welcome-actions{width:100%;max-width:340px;margin-top:auto;padding-top:28px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.welcome-start{width:100%;height:60px;border-radius:30px;background:#111;color:#fffef8;font-family:"ab-j-gu",'Hiragino Kaku Gothic ProN',sans-serif;font-size:24px;letter-spacing:.1em}
+.welcome-start:active{transform:scale(.98)}
+.welcome-login{margin:0;font-size:14px;font-weight:700;color:#111}
+.welcome-login-link{padding:4px 2px;font-size:14px;font-weight:800;color:#111;text-decoration:underline;text-underline-offset:3px}
+/* 黄色の部分にロゴとコピー、下の波の部分にボタンが来るように */
+.welcome-logo{margin-top:max(56px,14vh)}
+.welcome-actions{margin-top:auto}
+.login-back{position:absolute;top:calc(14px + env(safe-area-inset-top));left:14px;background:#fffef8cc}
+.login{position:relative}
+.welcome-logo{margin-top:max(64px,19vh)}.welcome-login-link{background:none;border:0}.welcome-start{font-size:26px}
