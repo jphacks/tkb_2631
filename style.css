@@ -824,3 +824,17 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 .profile-collection{background:#fff7d6;color:var(--ink)}
 .profile-collection small{color:var(--brown)}
 .profile-collection>.ui-icon{color:var(--brown)}
+/* 作業場の詳細：上に種類と残り時間（緑）、見出しは「だれの作業場」と「何をする会」を同じ大きさで */
+.room-detail-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-right:36px}
+.room-left{font-size:14px;font-weight:700;color:var(--green);white-space:nowrap}
+.room-detail h2{margin:10px 0 0}
+.room-detail-title{margin:2px 0 8px;font-size:20px;font-weight:700;line-height:1.4;color:var(--ink)}
+.room-detail .room-mark{margin-top:6px}
+.room-detail .room-members{margin-top:12px}
+/* 仲間に追加：黄色＋人に＋のアイコン（緑の「入る・集中する」と見分ける） */
+.friend-add{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--yellow);color:var(--ink);font-weight:700;font-size:14px;border-radius:999px;cursor:pointer}
+.friend-add .ui-icon{width:22px;height:22px;color:var(--ink)}
+.person-detail .friend-add.person-add{display:flex;margin:16px auto 0;height:48px;padding:0 22px}
+.map-detail .friend-add.map-add,.together-history .friend-add.map-add{flex:0 0 auto;width:42px;height:42px;min-width:42px;min-height:42px;padding:0;border-radius:50%;margin:0 0 0 auto}
+.together-history .friend-add.map-add{margin:14px auto 0;display:flex}
+.map-detail .friend-add.map-add .ui-icon,.together-history .friend-add.map-add .ui-icon{width:22px;height:22px}
