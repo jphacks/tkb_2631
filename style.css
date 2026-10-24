@@ -606,3 +606,31 @@ body:not([data-page="home"]):not([data-page="login"]) .heading h1{color:#188358;
 .guide-no{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#188358;color:#fffef8;font-size:14px;flex-shrink:0}
 .guide-steps p{margin:4px 0 0;font-size:14px;line-height:1.6;color:#3d4a33}
 .guide-steps{gap:8px}.guide-steps li{padding:10px}.guide-art{width:56px;height:56px}.guide h2{margin-bottom:8px}
+
+/* iPhoneで入力欄を押したときに画面が拡大されないように（16px未満だと自動で拡大される） */
+input:not([type=checkbox]):not([type=radio]),select,textarea{font-size:16px}
+
+/* 背の低い画面（スマホのブラウザ）のホーム：田んぼを広く見せる */
+@media(max-height:700px){
+ [data-page="home"] .farmbottom{bottom:12px;padding:8px 12px}
+ [data-page="home"] .farmbottom .progress{margin:5px 0 0;height:6px}
+ [data-page="home"] .farm-friends{margin-top:5px;font-size:14px}
+ [data-page="home"] .farm-faces .avatar.sprite{width:20px;height:20px}
+ [data-page="home"] .quickfocus{padding:8px 14px 6px;margin-top:-14px}
+ [data-page="home"] .quickfocus .quick-faces{display:none}
+ [data-page="home"] .quickfocus h2{font-size:14px}
+ [data-page="home"] .quickfocus .primary{min-width:38px;min-height:38px;width:38px;height:38px}
+ [data-page="home"] .lowgrid{padding:0 16px 6px}
+ [data-page="home"] .lowgrid>.card{padding-top:6px}
+ [data-page="home"] .task{min-height:46px}
+ [data-page="home"] .pager{height:26px;margin-top:2px}
+ [data-page="home"] .supplied-field .field-paddy{top:26%}
+ [data-page="home"] .supplied-field .field-students{bottom:26%;width:34%;height:30%}
+ [data-page="home"] .supplied-field .field-mascot{top:38%}
+ [data-page="home"] .supplied-field .field-university{top:14%}
+ [data-page="home"] .supplied-field .field-mountain{top:8%}
+ [data-page="home"] .supplied-field .field-hill{top:22%}
+ [data-page="home"] .supplied-field .field-sun{top:2%}
+ [data-page="home"] .heading{top:10px}
+ [data-page="home"] .weather-chip{top:40px;font-size:14px;padding:3px 8px}
+}
