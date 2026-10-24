@@ -47,4 +47,5 @@ ChatGPT Codex（2026-10-19〜20）で作ったものを Claude Code に引き継
 
 ## 公開
 - https://tanboru.vercel.app （Vercel・リンクを知っている人だけが見る想定。noindex で検索エンジンに載らない設定）
+- GitHub：https://github.com/kimie6710-ux/tkb_2631 （非公開）
 - 再デプロイ：`vercel deploy --prod --yes`（docs/・HANDOFF.md・.claude は .vercelignore で除外）
