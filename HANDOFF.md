@@ -133,3 +133,8 @@ ChatGPT Codex（2026-10-19〜20）で作ったものを Claude Code に引き継
 - 「最初からやり直す」で写真も消える
 - ログイン画面の背景はイラスト（`07_brand_ui/topログイン画像.png` → `assets/library/login_bg.webp`）
 - 成果の写真は、たんぼるのカメラ枠（`07_brand_ui/カメラ枠.png` → `assets/library/camera_frame.webp`）の窓に合わせて切り抜き、枠を重ねた900×1200のJPEGとして保存
+
+## 2026-10-24 タイトルのフォント（Adobe Fonts）
+- 各ページのいちばん上のタイトル（`.heading h1`）は AB-j_gu Regular（`font-family:"ab-j-gu"`・400）。Adobe Fonts の Web プロジェクト「jp hack」（kitId `wsk8dnu`、JavaScript の埋め込み・使う文字だけ読み込む方式）
+- 後から描かれるタイトルの文字も読み込まれるよう、全タイトルの文字を `index.html` の見えない `.title-glyphs` に置いている。タイトルの文言を変えたらここも更新する
+- AB-j_gu には「仲」が入っていないため、仲間タブのタイトルは「なかまとつながろう」（ひらがな）

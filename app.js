@@ -94,7 +94,7 @@ function deleteTask(id){if(!state.tasks.some(t=>t.id===id))return;state.tasks=st
 
 function setDuration(n){duration=n;state.duration=n;if(!running){remaining=n*60;deadline=null;sessionId=null}save()}
 function renderFriends(){if(friendView!=='rooms')friendView='people';const content=friendView==='people'?renderMap():renderRooms();
-return head(friendView==='rooms'?'いっしょに集中しよう':'仲間とつながろう')+`<div class="friend-views">${[['rooms','作業場'],['people','仲間']].map(([v,l])=>`<button data-friend-view="${v}" aria-pressed="${friendView===v}" class="${friendView===v?'selected':''}">${l}</button>`).join('')}</div>`+content}
+return head(friendView==='rooms'?'いっしょに集中しよう':'なかまとつながろう')+`<div class="friend-views">${[['rooms','作業場'],['people','仲間']].map(([v,l])=>`<button data-friend-view="${v}" aria-pressed="${friendView===v}" class="${friendView===v?'selected':''}">${l}</button>`).join('')}</div>`+content}
 function openPerson(key){const p=people[key];if(!p)return;const connected=state.connections.includes(key);modal(`<div class="person-detail"><span class="avatar sprite s${p.avatar}"></span><h2>${esc(p.name)}</h2><p>${esc(p.department)} · ${esc(p.year)}</p><button class="primary meeting-join" data-connect="${key}" aria-pressed="${connected}">${connected?'仲間から外す':'仲間に追加する'}</button>${roomOf(key)&&!running?`<button class="textbtn" data-room="${roomOf(key).key}">作業場を見る</button>`:''}</div>`)}
 
 

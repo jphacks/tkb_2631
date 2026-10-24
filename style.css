@@ -555,3 +555,8 @@ body[data-page="login"] .shell{background:#feda30 url('assets/library/login_bg.w
 /* 枠付きの写真は縦長（3:4） */
 .photo-cell{aspect-ratio:3/4}
 .photo-saved img{width:48px;height:64px}
+
+/* 各ページのいちばん上のタイトルは AB-j_gu（Adobe Fonts）。読み込めないときは今までのフォント */
+.heading h1{font-family:"ab-j-gu",'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;font-weight:400;letter-spacing:.02em}
+/* 使う文字だけ読み込む方式なので、タイトルの文字を最初からページに置いておく（画面には出さない） */
+.title-glyphs{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;font-family:"ab-j-gu",sans-serif}
