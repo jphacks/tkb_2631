@@ -811,3 +811,16 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 #modal:has(.room-create-pop){padding:24px 16px 20px}
 .room-create-pop .room-times>button:not(.primary),.room-create-pop .room-seats>button{padding:0 11px;white-space:nowrap}
 .room-create-pop .room-times{gap:5px}
+/* 作業場をつくる：どの行も左にアイコン（左から12px）、文字とチップは左から40pxの同じ線にそろえる */
+.room-create-pop .room-task>.ui-icon,.room-create-pop .room-place>.ui-icon,.room-create-pop .room-mark-field>.ui-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--green);pointer-events:none}
+.room-create-pop .room-task select,.room-create-pop .room-place select{padding-left:40px}
+.room-create-pop .room-mark-field{position:relative;margin-top:8px}
+.room-create-pop .room-mark-field .room-mark-input{margin:0;padding-left:40px;height:40px}
+.room-create-pop .room-seats,.room-create-pop .room-times{gap:6px;padding-left:12px}
+.room-create-pop .room-seats>.ui-icon,.room-create-pop .room-times>.ui-icon{width:18px;height:18px;margin:0 4px 0 0;color:var(--green);flex-shrink:0}
+/* はじめる ▶ は下の真ん中（ほかのポップアップの保存と同じ） */
+.room-create-pop .room-start{display:flex;margin:16px auto 0}
+/* マイページ：収穫・図鑑の行は実りの色（薄い黄色）にして、使い方・設定と分ける */
+.profile-collection{background:#fff7d6;color:var(--ink)}
+.profile-collection small{color:var(--brown)}
+.profile-collection>.ui-icon{color:var(--brown)}
