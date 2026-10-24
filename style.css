@@ -319,3 +319,17 @@ aside{height:calc(66px + env(safe-area-inset-bottom));padding-bottom:calc(6px + 
 .day small{white-space:nowrap;line-height:1.2}
 .day{position:relative}.day-dot{position:absolute;left:50%;bottom:3px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:#188358}
 @media(max-height:740px){.room-create{padding:10px 14px}.room-create .sectiontitle{display:none}.room-select select{height:40px}.room-select>svg{top:10px}.room-place>.ui-icon{top:11px}.room-times{margin-top:8px}.room-row{padding:7px 12px}.room-list{gap:6px}.room-faces .avatar.sprite{width:30px;height:30px}.room-copy small{margin-top:1px}}
+
+/* ===== 天気・時間帯の空（ホーム） ===== */
+[data-page="home"] .supplied-field{background:#dff0f1 top center/cover no-repeat}
+[data-page="home"] .supplied-field.sky-clear{background-image:url('assets/library/bg_clear.webp')}
+[data-page="home"] .supplied-field.sky-rain{background-image:url('assets/library/bg_rain.webp')}
+[data-page="home"] .supplied-field.sky-night{background-image:url('assets/library/bg_night.webp')}
+[data-page="home"] .supplied-field .field-cloud{display:none}
+[data-page="home"] .sky-night .field-land,[data-page="home"] .sky-night>img:not(.field-students):not(.field-mascot),[data-page="home"] .sky-night .paddy-scene{filter:brightness(.72) saturate(.85)}
+[data-page="home"] .sky-rain .field-land,[data-page="home"] .sky-rain>img:not(.field-students):not(.field-mascot),[data-page="home"] .sky-rain .paddy-scene{filter:saturate(.85)}
+body[data-page="home"][data-sky="night"] .heading h1{color:#fffdf2}
+.weather-chip{position:absolute;top:58px;left:18px;z-index:3;padding:4px 10px;border-radius:14px;background:#fffdf2d9;color:#254b32;font-size:14px;font-weight:700}
+@media(max-height:730px){.weather-chip{top:48px}}
+/* 今日：緑背景・白文字 */
+.day.is-today,.day.is-today.chosen{background:#188358;color:#fffef8;font-weight:800}
