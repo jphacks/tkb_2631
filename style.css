@@ -506,3 +506,9 @@ body[data-page="login"] main{height:100%;padding:0;background:none}
 .login-card .form-error:empty{display:none}
 .login-btn{height:50px;border-radius:25px;font-size:16px;margin-top:4px}
 .settings-logout{display:block;margin:10px auto 0;font-size:14px}
+/* 集中中の画面：「着いた」は自分の顔の下に。背の低い画面（実機のブラウザ）でも重ならないように */
+.arrived-pill{margin-top:2px;padding:4px 12px;border-radius:14px;background:#188358;color:#fffef8;font-size:14px;font-weight:700;line-height:1.3}
+.member-tile{min-width:72px}
+.room-live{overflow-y:auto;-webkit-overflow-scrolling:touch}
+@media(max-height:740px){.room-live{gap:8px;padding:12px 14px}.room-clock{margin:0}.room-clock strong{font-size:40px}.room-grow small,.room-note{display:none}.room-rice{height:56px}.room-live-head{gap:4px}}
+@media(max-height:640px){.room-grow{display:none}.room-clock strong{font-size:40px;line-height:1.1}.member-tile .avatar.sprite{width:44px;height:44px}.room-mark{padding:2px 8px}}
