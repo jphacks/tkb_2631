@@ -475,3 +475,14 @@ button.member-tile:active .avatar{transform:scale(.95)}
 .member-tile.me .avatar.sprite{box-shadow:0 0 0 3px #f3ca45}
 .room-stamps{gap:4px;flex-wrap:nowrap}.room-stamps button{padding:6px 9px;white-space:nowrap}
 .map-sprig{transform:translate(-50%,-80%);width:22px}
+/* アイコン枠のイラスト：仲間は緑、あなた・選択中は黄色 */
+.map-blob,.map-node.me .map-blob,.map-node.more .map-blob{border-radius:50%;background:url('assets/library/frame_green.webp') center/100% 100% no-repeat;box-shadow:none}
+.map-node.me .map-blob,.map-node.selected .map-blob{background-image:url('assets/library/frame_yellow.webp')}
+.map-node.selected .map-blob{box-shadow:0 0 16px #f3ca4566}
+.map-blob .avatar.sprite{width:76%;height:76%}
+.map-node.more .map-blob{background-color:transparent}
+.member-tile .avatar.sprite,.member-tile.me .avatar.sprite{box-shadow:none;outline:none}
+.member-tile .avatar.sprite{position:relative}
+.member-tile .avatar.sprite::after{content:'';position:absolute;inset:-6px;background:url('assets/library/frame_green.webp') center/100% 100% no-repeat;pointer-events:none}
+.member-tile.me .avatar.sprite::after{background-image:url('assets/library/frame_yellow.webp')}
+.member-tile .avatar.sprite{overflow:visible}
