@@ -104,7 +104,8 @@ return head(friendView==='rooms'?'いっしょに集中しよう':'なかまと�
 function openPerson(key){const p=people[key];if(!p)return;const connected=state.connections.includes(key);modal(`<div class="person-detail"><span class="avatar sprite s${p.avatar}"></span><h2>${esc(p.name)}</h2><p>${esc(p.department)} · ${esc(p.year)}</p><button class="primary meeting-join" data-connect="${key}" aria-pressed="${connected}">${connected?'仲間から外す':'仲間に追加する'}</button>${roomOf(key)&&!running?`<button class="textbtn" data-room="${roomOf(key).key}">作業場を見る</button>`:''}</div>`)}
 
 
-function navIcon(name){if(name==='profile')return `<span class="nav-art nav-face avatar sprite s${state.profile.avatar}" aria-hidden="true"></span>`;const assets={home:'paddy_4_plots',tasks:'calendar',friends:'students_group_02'};return art(assets[name],'nav-art nav-'+name,'')}
+// 下のメニュー：ユーザー提供の緑のアイコン（田んぼ・カレンダー・二人）。マイページだけ同じ色の一人のアイコン（SVG）
+function navIcon(name){if(name==='profile')return `<svg class="nav-art nav-profile" viewBox="0 0 24 24" aria-hidden="true" fill="#1b865a"><circle cx="12" cy="7.6" r="4.4"/><path d="M3.6 21.2c0-4.4 3.7-7.4 8.4-7.4s8.4 3 8.4 7.4c0 .5-.4.8-.9.8H4.5c-.5 0-.9-.3-.9-.8z"/></svg>`;return `<img class="nav-art nav-${name}" src="assets/library/nav_${name}.webp" alt="" draggable="false">`}
 
 function initializePersistentData(){
  let changed=false;
