@@ -421,3 +421,9 @@ body[data-page="home"][data-sky="night"] .heading h1{color:#fffdf2}
 .done-points{display:flex;align-items:center;justify-content:center;gap:8px;margin:4px 0;font-size:24px;font-weight:800;color:#137b4e}
 .done-points span{font-size:14px;padding:2px 8px;border-radius:12px;background:#fff7d6;color:#5b4a14}
 @media(max-height:740px){.room-mark-input{height:34px;margin-top:6px}.room-select select{height:38px}.room-select>svg{top:9px}.room-place>.ui-icon{top:10px}.room-row{padding:5px 12px}.room-online-note{margin-top:6px;padding:4px 10px}}
+.map-detail-copy b{display:flex;align-items:center;gap:8px}.map-year{font-size:14px;font-weight:700;padding:1px 8px;border-radius:12px;background:#e8edd9;color:#1d5a3a}
+.collect-rate{margin-top:16px}
+.collect-rate b{font-size:16px}
+.collect-rate span{font-size:16px;font-weight:800;color:#137b4e}
+.collect-progress{margin-top:6px}
+.collect-progress>div{background:#f3ca45}
