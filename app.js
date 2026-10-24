@@ -30,7 +30,7 @@ function normalizeState(){
  state.togetherPoints ||= 0;
  state.recentTogether=(state.recentTogether||[]).filter(k=>people[k]);
  state.completedTaskIds ||= state.tasks.filter(t=>t.done||t.rewarded).map(t=>t.id);
- state.profile={name:'しまの りゅうせい',university:'慶應義塾大学 SFC',department:'',year:'1年生',avatar:0,...state.profile};if(state.profile.university==='たんぼる大学')state.profile.university='慶應義塾大学 SFC';
+ state.profile={name:'田中ハク',university:'慶應義塾大学 SFC',department:'',year:'1年生',avatar:0,...state.profile};if(state.profile.name==='しまの りゅうせい')state.profile.name='田中ハク';if(state.profile.university==='たんぼる大学')state.profile.university='慶應義塾大学 SFC';
  if(![...sfcPlaces,ONLINE].includes(state.roomPlace))state.roomPlace=sfcPlaces[0];
  state.settings={hideCompleted:false,vibrate:true,sound:false,notify:false,...state.settings};delete state.settings.focusLock;
  state.connections=[...new Set((state.connections||[]).map(c=>typeof c==='number'?({1:'aya',2:'riku',3:'ken'})[c]:c).filter(c=>people[c]))];
