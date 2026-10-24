@@ -446,3 +446,31 @@ body[data-page="home"][data-sky="night"] .heading h1{color:#fffdf2}
 .room-stamps{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
 .room-stamps button{padding:7px 12px;border-radius:18px;background:#fff7d6;color:#5b4a14;font-size:14px;font-weight:700;box-shadow:0 1px 4px #4a3d1014}
 .room-stamps button:active{transform:scale(.96)}
+/* 作業場のメンバーは顔アイコンを横に並べる */
+.room-members.tiles{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:10px 18px;overflow:visible}
+.member-tile{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px;padding:0;border:0;background:none;font:inherit;color:var(--ink)}
+button.member-tile{cursor:pointer}
+.member-tile .avatar.sprite{width:56px;height:56px;box-shadow:0 0 0 3px #e2f0d6}
+.member-tile b{font-size:14px;margin-top:2px}
+.member-tile small{font-size:14px;color:#137b4e}
+.member-tile small.coming{color:var(--muted)}
+button.member-tile:active .avatar{transform:scale(.95)}
+.room-live .arrived-btn{align-self:center;margin:0;padding:9px 22px}
+/* つながりマップ：水路・草・点のイラスト */
+.map-streams{position:absolute;inset:0;pointer-events:none}
+.map-stream-img{position:absolute;max-width:none;transform-origin:center;pointer-events:none}
+.map-stream-img.straight{opacity:.45;filter:saturate(.4)}
+.map-sprig,.map-dot{position:absolute;transform:translate(-50%,-50%);pointer-events:none;z-index:1;background:none;box-shadow:none}
+.map-sprig{width:20px;height:auto}
+.map-dot{width:24px;height:auto;border-radius:0}
+.map-empty-art{position:absolute;left:50%;top:50%;width:min(42%,150px);transform:translate(-50%,-96%);opacity:.9}
+.map-blob{width:min(64px,8.5vh);height:min(64px,8.5vh)}
+.map-node.me .map-blob{width:min(80px,10vh);height:min(80px,10vh)}
+@media(max-height:740px){.map-blob{width:7vh;height:7vh}.map-node.me .map-blob{width:8.5vh;height:8.5vh}}
+.map-count{top:-8px;right:-18px}
+.room-members.tiles{flex-shrink:0;min-height:auto}
+.room-members.tiles li>button.member-tile{display:flex;flex-direction:column;align-items:center;gap:2px;width:auto;padding:0;border-radius:0;background:none}
+.room-live .room-stamps{flex-shrink:0}
+@media(max-height:740px){.member-tile .avatar.sprite{width:46px;height:46px}.room-clock strong{font-size:40px}.room-rice{height:min(70px,10vh)}}
+.member-tile.me .avatar.sprite{box-shadow:0 0 0 3px #f3ca45}
+.room-stamps{gap:4px;flex-wrap:nowrap}.room-stamps button{padding:6px 9px;white-space:nowrap}
