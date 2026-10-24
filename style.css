@@ -474,3 +474,4 @@ button.member-tile:active .avatar{transform:scale(.95)}
 @media(max-height:740px){.member-tile .avatar.sprite{width:46px;height:46px}.room-clock strong{font-size:40px}.room-rice{height:min(70px,10vh)}}
 .member-tile.me .avatar.sprite{box-shadow:0 0 0 3px #f3ca45}
 .room-stamps{gap:4px;flex-wrap:nowrap}.room-stamps button{padding:6px 9px;white-space:nowrap}
+.map-sprig{transform:translate(-50%,-80%);width:22px}
