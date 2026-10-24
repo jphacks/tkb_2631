@@ -6,7 +6,9 @@
 
 <!-- デモ動画ができたら、上の画像を動画リンク付きの画像に差し替える -->
 
-公開版：https://tanboru.vercel.app
+公開先（Firebase Hosting、デプロイ後）：https://tanboru-2da31.web.app
+
+旧公開先（Vercel）：https://tanboru.vercel.app
 
 ## 製品概要
 ### 背景(製品開発のきっかけ、課題等）
@@ -57,9 +59,9 @@
 #### フレームワーク・ライブラリ・モジュール
 * HTML / CSS / JavaScript（フレームワーク・ビルドなし）
 * Web App Manifest（ホーム画面への追加）
-* Vercel（公開）
+* Firebase Hosting（公開先）
 
-Firebase の設定と2台での確認方法は [FIREBASE_SETUP.md](FIREBASE_SETUP.md) を参照してください。
+Firebase Hosting への公開方法と2台での確認方法は [FIREBASE_SETUP.md](FIREBASE_SETUP.md) を参照してください。
 
 #### デバイス
 * スマートフォン（iPhone / Android のブラウザ）

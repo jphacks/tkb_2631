@@ -1,3 +1,5 @@
 .DS_Store
 .vercel
+.firebase/
+firebase-debug.log
 *:Zone.Identifier

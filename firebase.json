@@ -1,5 +1,41 @@
 {
   "firestore": {
     "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "firebase-debug.log",
+      "firestore.rules",
+      "**/.*",
+      ".git/**",
+      ".firebase/**",
+      ".claude/**",
+      "**/node_modules/**",
+      "README.md",
+      "FIREBASE_SETUP.md",
+      "HANDOFF.md",
+      "LICENSE",
+      "docs/**",
+      "package.json",
+      "package-lock.json",
+      "vercel.json"
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
+          }
+        ]
+      }
+    ]
   }
 }
