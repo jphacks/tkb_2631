@@ -784,3 +784,14 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 /* 作業場の一覧：顔の列と間隔を少し詰めて、場所の名前を1行に収める */
 .room-faces{width:50px}
 #main button.card:has(.room-copy){gap:8px}
+/* 自分の作業場の人数（2・4・6人）：時間と同じチップ、選んだら黄色 */
+.room-seats{display:flex;align-items:center;gap:6px;margin-top:8px}
+.room-seats>.ui-icon{width:20px;height:20px;color:var(--green);margin-right:2px;flex-shrink:0}
+.room-seats>button{display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:20px;background:var(--tint);font-size:14px;color:var(--ink)}
+.room-seats>button.selected{background:var(--yellow);font-weight:700}
+/* 集中中：見出しの右に「いまの人数 / 定員」 */
+.room-live .between>.live-count{margin-left:auto;margin-right:4px}
+/* 4人以上は顔を少し小さくして1列に収める */
+.room-members.tiles.many{gap:8px 10px}
+.room-members.tiles.many .member-tile{min-width:52px}
+.room-members.tiles.many .member-tile .avatar.sprite{width:44px;height:44px}
