@@ -549,3 +549,9 @@ body[data-page="login"] main{height:100%;padding:0;background:none}
 .photo-view{text-align:center}
 .photo-view img{max-width:100%;max-height:60vh;border-radius:14px}
 label.photo-cell input[type=file],label.photo-btn input[type=file]{display:none!important}
+/* ログイン画面の背景イラスト（黄色＋下のクリームの波） */
+body[data-page="login"]{background:#feda30}
+body[data-page="login"] .shell{background:#feda30 url('assets/library/login_bg.webp') center bottom/cover no-repeat!important}
+/* 枠付きの写真は縦長（3:4） */
+.photo-cell{aspect-ratio:3/4}
+.photo-saved img{width:48px;height:64px}
