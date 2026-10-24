@@ -55,6 +55,8 @@ function homeTasks(){return state.tasks.filter(t=>t.date===todayISO||(!t.done&&t
 const menus=[['home','ホーム'],['tasks','タスク'],['friends','仲間'],['profile','マイページ']];
 const ingredients={salmon:{name:'さけ',emoji:'🐟',price:30},carrot:{name:'にんじん',emoji:'🥕',price:20},potato:{name:'じゃがいも',emoji:'🥔',price:20},onion:{name:'たまねぎ',emoji:'🧅',price:20},egg:{name:'たまご',emoji:'🥚',price:20},tomato:{name:'トマト',emoji:'🍅',price:30},shrimp:{name:'えび',emoji:'🦐',price:30},chicken:{name:'とりにく',emoji:'🍗',price:30}};
 const recipes=[{key:'tkg',name:'たまごかけごはん',emoji:'🍚',rice:1,items:{egg:1}},{key:'onigiri',name:'おにぎり',sprite:8,rice:1,items:{salmon:1}},{key:'curry',name:'カレーライス',sprite:9,rice:2,items:{carrot:1,potato:1,onion:1}},{key:'omurice',name:'オムライス',sprite:10,rice:2,items:{egg:2,tomato:1,onion:1}},{key:'sushi',name:'おすし',emoji:'🍣',rice:2,items:{salmon:2}},{key:'tendon',name:'えび天丼',emoji:'🍤',rice:2,items:{shrimp:2,egg:1}},{key:'bento',name:'おべんとう',emoji:'🍱',rice:2,items:{chicken:1,egg:1,carrot:1}}];
+// 図鑑の3品（お米の量で解放）。マイページと図鑑の画面はこれを使う（recipes への置き換えで消えていたので戻した）
+const dishes=[['おにぎり',3],['カレーライス',6],['オムライス',9]];
 const dishArt=(r,cls='')=>r.sprite?`<div class="food-art sprite s${r.sprite} ${cls}" role="img" aria-label="${r.name}"></div>`:`<div class="food-art food-emoji ${cls}" role="img" aria-label="${r.name}">${r.emoji}</div>`;
 const cookedCount=()=>recipes.filter(r=>state.cooked[r.key]).length;
 function collectRate(){const got=cookedCount(),pct=Math.round(got/recipes.length*100);return `<div class="collect-rate"><div class="between"><b>コレクション ${got} / ${recipes.length}</b><span>${pct}%</span></div><div class="progress collect-progress"><div style="width:${pct}%"></div></div></div>`}
@@ -91,7 +93,7 @@ setInterval(()=>{if(pendingRender&&!typing()){pendingRender=false;render()}refre
 initializePersistentData();
 render();
 tickTimer();
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){fetchCampusWeather();requestWakeLock();refreshDay();tickTimer()}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){fetchWeather();requestWakeLock();refreshDay();tickTimer()}});
 window.addEventListener?.('focus',()=>{refreshDay();tickTimer()});
 
 function openProfileEditor(){const p=state.profile;modal(`<h2>プロフィールを編集</h2><form id="profileForm"><fieldset class="avatar-options"><legend>アイコン</legend>${[0,1,2,3].map(n=>`<label><input type="radio" name="avatar" value="${n}" ${p.avatar===n?'checked':''} aria-label="アイコン${n+1}"><span class="avatar sprite s${n}"></span></label>`).join('')}</fieldset><label>名前<input name="name" maxlength="30" required value="${esc(p.name)}"></label><label>大学<input name="university" maxlength="60" required value="${esc(p.university)}"></label><label>学部<select name="department">${['','総合政策学部','環境情報学部','看護医療学部'].map(d=>`<option value="${d}" ${p.department===d?'selected':''}>${d||'選ばない'}</option>`).join('')}${p.department&&!['総合政策学部','環境情報学部','看護医療学部'].includes(p.department)?`<option selected>${esc(p.department)}</option>`:''}</select></label><label>学年<select name="year">${['1年生','2年生','3年生','4年生','5年生','6年生','大学院生','その他'].map(y=>`<option ${y===p.year?'selected':''}>${y}</option>`).join('')}</select></label><p class="form-error" id="profileError" role="alert"></p><button class="primary icon-btn" aria-label="プロフィールを保存" title="保存">${icon('check')}</button></form>`);
