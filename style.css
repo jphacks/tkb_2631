@@ -637,3 +637,39 @@ input:not([type=checkbox]):not([type=radio]),select,textarea{font-size:16px}
 /* 進み具合のカードが下の白いカードと重ならないように */
 @media(max-height:700px){[data-page="home"] .farmbottom{bottom:30px}[data-page="home"] .quickfocus{margin-top:-12px}}
 [data-page="home"] .farmbottom{box-shadow:0 4px 18px rgba(30,60,35,.08),0 0 0 2px #fffdf2}
+
+/* ===== アプリ内カメラ ===== */
+.camera{display:flex;flex-direction:column;align-items:center;gap:10px}
+.camera-stage{position:relative;width:min(100%,300px);aspect-ratio:1086/1448;border-radius:18px;overflow:hidden;background:#1c2a22}
+.camera-stage video,.camera-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.camera-stage video.mirror{transform:scaleX(-1)}
+.camera-frame{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.camera-stage.off video{display:none}
+.camera-stage.off{background:#eef0e2}
+.camera-hint{margin:0;font-size:14px;color:#3d5a3f;text-align:center}
+.camera-actions{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:300px;gap:8px}
+.camera-actions.review{justify-content:center}
+.camera-actions.review .primary{width:auto;margin:0;padding:12px 20px}
+.camera-pick{font-size:14px;padding:8px 4px;cursor:pointer}
+.camera-shutter{width:66px;height:66px;border-radius:50%;background:#fffef8;box-shadow:0 0 0 4px #188358 inset,0 2px 8px #00000022;display:grid;place-items:center}
+.camera-shutter span{width:52px;height:52px;border-radius:50%;background:#188358}
+.camera-shutter:disabled{opacity:.4}
+.photo-done{text-align:center}
+.photo-done img{width:150px;height:200px;object-fit:cover;border-radius:14px;margin-bottom:8px}
+.photo-done p{margin:4px 0 10px;font-weight:700;color:#137b4e}
+.photo-cell.add{background:#e8edd9}
+.photo-cell.add .ui-icon{width:30px;height:30px}
+
+/* トップ以外のタイトルの左の位置を、ホームの「みんなで育てよう」に合わせる（18px） */
+body:not([data-page="home"]):not([data-page="login"]) .heading{padding-left:6px}
+
+/* 背の低い画面のホーム：山・学校を出さず、田んぼそのものを上に広く見せる */
+@media(max-height:700px){
+ [data-page="home"] .supplied-field .field-mountain,[data-page="home"] .supplied-field .field-hill,[data-page="home"] .supplied-field .field-university,[data-page="home"] .supplied-field .field-tree{display:none}
+ [data-page="home"] .field-land{top:16%}
+ [data-page="home"] .paddy-scene{top:9%;left:-4%;width:100%}
+ [data-page="home"] .supplied-field .field-students{bottom:27%;right:-2%;width:32%;height:28%}
+ [data-page="home"] .supplied-field .field-mascot{top:auto;bottom:28%;left:3%;width:13%;height:18%}
+ [data-page="home"] .supplied-field .field-sun{top:4%;right:5%;width:16%;height:16%}
+}
+@media(max-height:700px){[data-page="home"] .supplied-field .field-students{display:none}[data-page="home"] .supplied-field .field-mascot{left:auto;right:4%;bottom:29%}}
