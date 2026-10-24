@@ -333,3 +333,10 @@ body[data-page="home"][data-sky="night"] .heading h1{color:#fffdf2}
 @media(max-height:730px){.weather-chip{top:48px}}
 /* 今日：緑背景・白文字 */
 .day.is-today,.day.is-today.chosen{background:#188358;color:#fffef8;font-weight:800}
+
+/* 田んぼにときどき来る生きもの */
+[data-page="home"] .supplied-field .visitor{position:absolute;z-index:6;height:auto;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+[data-page="home"] .supplied-field .visitor-crow{width:17%}
+[data-page="home"] .supplied-field .visitor-grasshopper{width:12%}
+[data-page="home"] .supplied-field .field-mascot{width:14%;height:19%;left:3%;bottom:auto;top:52%;z-index:5}
+@media(max-height:740px){[data-page="home"] .supplied-field .field-mascot{top:42%}}

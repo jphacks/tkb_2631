@@ -144,3 +144,24 @@ function skyKind(){const w=freshWeather(),h=new Date().getHours();if(w?!w.isDay:
 async function fetchWeather(){if(state.weather&&Date.now()-state.weather.at<30*60000)return;try{const res=await fetch(SFC_WEATHER_URL);if(!res.ok)return;const c=(await res.json()).current;if(!c||!Number.isFinite(c.weather_code))return;state.weather={at:Date.now(),code:c.weather_code,isDay:c.is_day===1,temp:Math.round(c.temperature_2m)};save();refreshSky(true)}catch{}}
 function refreshSky(force){const k=skyKind()+(freshWeather()?.code??'');if(!force&&k===skyShown)return;const first=!skyShown;skyShown=k;if(!first&&page==='home'&&!$('#modal').open)render();else document.body.dataset.sky=skyKind();if(Date.now()-(state.weather?.at||0)>=30*60000)fetchWeather()}
 fetchWeather();
+
+// ===== 田んぼにときどき来る生きもの（カラス・イナゴ）。タップすると逃げていく =====
+let visitorTimer=null,visitorBusy=false;
+const vimg=n=>'assets/library/'+n+'.webp',pause=ms=>new Promise(r=>setTimeout(r,ms));
+const glide=(el,frames,ms)=>el.animate(frames,{duration:ms,easing:'ease-in-out',fill:'forwards'}).finished.catch(()=>{});
+function scheduleVisitor(first){clearTimeout(visitorTimer);visitorTimer=setTimeout(()=>{if(page==='home'&&!document.hidden&&!$('#modal').open&&!visitorBusy&&!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)spawnVisitor();scheduleVisitor(false)},first?8000+Math.random()*7000:60000+Math.random()*60000)}
+function spawnVisitor(kind){const field=$('.supplied-field');if(!field||visitorBusy)return;kind ||= skyKind()==='night'||Math.random()<.4?'grasshopper':'crow';visitorBusy=true;const el=document.createElement('img');el.className='visitor visitor-'+kind;el.alt='';el.draggable=false;field.appendChild(el);(kind==='crow'?crowVisit(el):grasshopperVisit(el)).finally(()=>{el.remove();visitorBusy=false})}
+async function crowVisit(el){let leaving=false;el.onclick=()=>{leaving=true};const flap=()=>setInterval(()=>{el.src=vimg(el.src.includes('crow_fly1')?'crow_fly2':'crow_fly1')},180),land={x:42+Math.random()*22,y:44+Math.random()*8};
+ el.src=vimg('crow_fly1');let f=flap();await glide(el,[{left:'-25%',top:'6%'},{left:land.x+'%',top:land.y+'%'}],2400);clearInterval(f);if(!el.isConnected)return;
+ el.src=vimg('crow_land');await pause(450);
+ for(let i=0;i<9&&!leaving&&el.isConnected;i++){el.src=vimg(i%2?'crow_land':'crow_peck');await pause(450)}
+ if(!el.isConnected)return;if(leaving)toast('カラスを追いはらいました');
+ el.src=vimg('crow_fly1');f=flap();await glide(el,[{left:land.x+'%',top:land.y+'%'},{left:'125%',top:'-15%'}],leaving?1000:1900);clearInterval(f)}
+async function grasshopperVisit(el){let leaving=false;el.onclick=()=>{leaving=true};const ground=58+Math.random()*6,target=24+Math.random()*30;let x=-15;
+ const hop=async(to,ms)=>{el.src=vimg('grasshopper_jump');await glide(el,[{left:x+'%',top:ground+'%'},{left:(x+to)/2+'%',top:(ground-9)+'%'},{left:to+'%',top:ground+'%'}],ms);x=to;if(el.isConnected)el.src=vimg('grasshopper_stand')};
+ el.style.left=x+'%';el.style.top=ground+'%';el.src=vimg('grasshopper_stand');
+ while(x<target-1&&el.isConnected){await hop(Math.min(target,x+18),650);await pause(350)}
+ for(let i=0;i<12&&!leaving&&el.isConnected;i++)await pause(400);
+ if(!el.isConnected)return;if(leaving)toast('イナゴがぴょんと逃げていきました');
+ while(x<115&&el.isConnected){await hop(x+22,leaving?420:650);await pause(leaving?60:250)}}
+scheduleVisitor(true);
