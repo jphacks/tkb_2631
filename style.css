@@ -701,3 +701,12 @@ body:not([data-page="home"]):not([data-page="login"]) .heading{padding-left:6px}
 .camera-actions .camera-pick{justify-self:start;display:inline-flex;align-items:center;height:40px;padding:0 14px;border-radius:20px;background:#edf1e2;color:#137e50;font-size:14px;font-weight:700;white-space:nowrap}
 .camera-actions #camFlip{justify-self:end}
 .camera-actions.review{display:flex}
+.camera-actions .camera-pick{width:46px;height:46px;min-width:46px;padding:0;border-radius:50%;justify-content:center}
+.camera-actions .camera-pick .ui-icon{width:24px;height:24px}
+/* 背の低い画面：木と学校は出さず、山を少し下げて薄い緑の地面とつなげる（空のすき間をなくす） */
+@media(max-height:700px){
+ [data-page="home"] .supplied-field .field-tree,[data-page="home"] .supplied-field .field-university{display:none}
+ [data-page="home"] .supplied-field .field-mountain{top:13%;left:-14%;width:72%;height:36%}
+ [data-page="home"] .supplied-field .field-hill{top:21%;right:-22%}
+ [data-page="home"] .field-land{top:31%}
+}
