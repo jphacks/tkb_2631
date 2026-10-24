@@ -340,3 +340,42 @@ body[data-page="home"][data-sky="night"] .heading h1{color:#fffdf2}
 [data-page="home"] .supplied-field .visitor-grasshopper{width:12%}
 [data-page="home"] .supplied-field .field-mascot{width:14%;height:19%;left:3%;bottom:auto;top:52%;z-index:5}
 @media(max-height:740px){[data-page="home"] .supplied-field .field-mascot{top:42%}}
+
+/* ===== つながりマップ ===== */
+[data-page="friends"] main{display:flex;flex-direction:column}
+.map-card{flex:1;min-height:0;display:flex;flex-direction:column;padding:14px 16px 10px}
+.map-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.map-head h2{margin:0;font-size:20px}
+.map-head p{margin:4px 0 0;font-size:14px;color:#5f6f56}
+.map-total{display:inline-flex;align-items:center;gap:4px;font-size:20px;font-weight:800;color:#254b32}
+.map-total .ui-icon{width:24px;height:24px}
+.map-area{position:relative;flex:1;min-height:220px;margin-top:6px}
+.map-streams{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.map-stream{fill:none;stroke:#a6d8f2;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.map-stream.pending{stroke:#c8d6dc;stroke-dasharray:2 9}
+.map-shine{fill:none;stroke:#fffef8;stroke-width:2px;stroke-linecap:round;stroke-dasharray:7 14;opacity:.85;vector-effect:non-scaling-stroke;animation:map-flow 3s linear infinite}
+@keyframes map-flow{to{stroke-dashoffset:-42}}
+@media(prefers-reduced-motion:reduce){.map-shine{animation:none}}
+.map-node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;padding:0;border:0;background:none;font:inherit;color:var(--ink);cursor:pointer;z-index:2}
+.map-node b{font-size:14px}
+.map-blob{position:relative;display:grid;place-items:center;width:min(76px,11vh);height:min(76px,11vh);border-radius:50% 46% 52% 48%;background:radial-gradient(circle at 50% 60%,#e4f0d2 58%,#d3e7bd 59%)}
+.map-blob .avatar.sprite{width:78%;height:78%}
+.map-node.me .map-blob{width:min(92px,13vh);height:min(92px,13vh);background:radial-gradient(circle,#fff3c4 60%,#fbe9a6 61%)}
+.map-node.me{cursor:default;z-index:3}
+.map-node.pending .map-blob{opacity:.6;filter:grayscale(.4)}
+.map-node.selected .map-blob{box-shadow:0 0 0 4px #fbe9a6,0 0 18px #f3ca4588}
+.map-count{position:absolute;top:-6px;right:-14px;padding:1px 8px;border-radius:12px;background:#fff7d6;box-shadow:0 1px 4px #4a3d1022;font-size:14px;font-weight:800;color:#5b4a14}
+.map-sprig{position:absolute;width:14px;height:16px;transform:translate(-50%,-50%);background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'%3E%3Cpath d='M7 16C7 10 4 6 1 4M7 16c0-6 2-10 6-13M7 16c0-5-1-8-2-10' fill='none' stroke='%235aa64a' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");z-index:1}
+.map-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:#f0c94a;transform:translate(-50%,-50%);z-index:1;box-shadow:9px -5px 0 -1px #f0c94a}
+.map-empty-btn{align-self:center;margin-top:6px}
+.map-detail{display:flex;align-items:center;gap:12px;padding:12px 14px;flex-shrink:0}
+.map-detail>.avatar.sprite{width:52px;height:52px;flex-shrink:0;box-shadow:0 0 0 3px #fbe9a6}
+.map-detail-copy{flex:1;min-width:0}
+.map-detail-copy b{display:block;font-size:16px}
+.map-detail-copy small{display:block;margin-top:2px;font-size:14px;color:#5f6f56}
+.map-detail .primary{flex-shrink:0;padding:10px 14px;border-radius:22px;font-size:14px}
+.map-detail{flex-wrap:wrap}
+.map-detail .primary,.map-detail .primary{flex:1 0 100%;margin-top:2px}
+.map-detail .textbtn.icon-btn{margin-left:auto}
+.map-blob{width:min(76px,9.5vh);height:min(76px,9.5vh)}.map-node.me .map-blob{width:min(92px,11.5vh);height:min(92px,11.5vh)}
+@media(max-height:740px){.map-head p{display:none}.map-card{padding:10px 14px 6px}.map-detail{flex-wrap:nowrap;padding:8px 12px}.map-detail>.avatar.sprite{width:42px;height:42px}.map-detail .primary{flex:0 0 auto;margin:0;padding:9px 12px}.map-detail-copy small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.map-blob{width:8vh;height:8vh}.map-node.me .map-blob{width:9.5vh;height:9.5vh}}
