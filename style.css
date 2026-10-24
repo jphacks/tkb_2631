@@ -581,3 +581,9 @@ body[data-page="login"] .shell{background:#feda30 url('assets/library/login_bg.w
 .room-row{padding:8px 12px;flex-shrink:0}
 .room-faces{width:58px;flex-shrink:0;justify-content:flex-start}
 @media(max-height:740px){.room-row{padding:6px 12px}.room-copy small{margin-top:0}}
+/* トップ（ホーム）以外のページのタイトルは緑の文字 */
+body:not([data-page="home"]):not([data-page="login"]) .heading{height:auto;padding-top:6px}
+body:not([data-page="home"]):not([data-page="login"]) .heading h1{color:#188358;font-size:24px;letter-spacing:.06em;line-height:1.3}
+/* 背の低い画面のタスク画面：タイトルとカレンダーを少し詰める。それでも足りなければスクロール */
+@media(max-height:640px){body:not([data-page="home"]):not([data-page="login"]) .heading h1{font-size:20px}body:not([data-page="home"]):not([data-page="login"]) .heading{padding-top:2px}[data-page="tasks"] .day{min-height:22px!important;padding:2px!important}[data-page="tasks"] .calendar{gap:3px}[data-page="tasks"] .day-record-btn{margin:4px 0 0;padding:6px 12px}}
+#main.fit-scroll{overflow-y:auto!important;-webkit-overflow-scrolling:touch}
