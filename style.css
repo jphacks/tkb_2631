@@ -695,3 +695,9 @@ body:not([data-page="home"]):not([data-page="login"]) .heading{padding-left:6px}
  [data-page="home"] .farmbottom .subtle{font-size:14px}
  [data-page="home"] .farmbottom .progress{margin:4px 0 0;height:6px}
 }
+/* カメラ画面のボタン：左「写真から選ぶ」・中央シャッター・右切り替え。ファイル選択欄は見せない */
+.camera-pick input[type=file]{display:none!important}
+.camera-actions{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.camera-actions .camera-pick{justify-self:start;display:inline-flex;align-items:center;height:40px;padding:0 14px;border-radius:20px;background:#edf1e2;color:#137e50;font-size:14px;font-weight:700;white-space:nowrap}
+.camera-actions #camFlip{justify-self:end}
+.camera-actions.review{display:flex}
