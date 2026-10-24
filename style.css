@@ -512,3 +512,40 @@ body[data-page="login"] main{height:100%;padding:0;background:none}
 .room-live{overflow-y:auto;-webkit-overflow-scrolling:touch}
 @media(max-height:740px){.room-live{gap:8px;padding:12px 14px}.room-clock{margin:0}.room-clock strong{font-size:40px}.room-grow small,.room-note{display:none}.room-rice{height:56px}.room-live-head{gap:4px}}
 @media(max-height:640px){.room-grow{display:none}.room-clock strong{font-size:40px;line-height:1.1}.member-tile .avatar.sprite{width:44px;height:44px}.room-mark{padding:2px 8px}}
+
+/* ===== 成果の写真・その日のがんばり ===== */
+.photo-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:46px;margin-top:10px;border-radius:23px;background:#fff7d6;color:#5b4a14;font-size:16px;font-weight:700;cursor:pointer}
+.photo-btn .ui-icon{width:22px;height:22px}
+.photo-btn.busy{opacity:.6;pointer-events:none}
+.photo-saved{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px;font-size:14px;font-weight:700;color:#137b4e}
+.photo-saved img{width:56px;height:56px;border-radius:12px;object-fit:cover}
+.day.has-record:not(.is-today){background:#e2f0d6;color:#14532f;font-weight:700}
+.day-record-btn{display:flex;align-items:center;gap:8px;width:100%;margin:8px 0 2px;padding:8px 12px;border-radius:14px;background:#fff7d6;color:#5b4a14;font-size:14px;font-weight:700;text-align:left}
+.day-record-btn span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-record-btn .ui-icon{width:18px;height:18px;flex-shrink:0}
+.day-record-btn .day-record-art{width:22px;height:22px;object-fit:contain}
+.day-record-btn.empty{background:#f1f2e6;color:var(--muted);font-weight:400}
+.day-record{max-height:72vh;overflow-y:auto;text-align:left}
+.day-record h2{margin:0 0 10px}
+.day-record h3{margin:16px 0 6px;font-size:16px}
+.day-sum{display:flex;gap:6px}
+.day-sum span{flex:1;padding:8px 4px;border-radius:12px;background:#e8edd9;text-align:center;font-size:14px;color:#3d5a3f}
+.day-sum b{display:block;font-size:24px;color:#137b4e}
+.day-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.day-list li{display:flex;flex-direction:column;gap:3px;padding:10px 12px;border-radius:12px;background:#f6f6ec}
+.day-list li small{font-size:14px;color:var(--muted)}
+.day-list.tasks li{flex-direction:row;align-items:center;gap:8px;font-size:14px}
+.day-list.tasks .ui-icon{width:20px;height:20px;flex-shrink:0}
+.day-faces{display:flex;align-items:center;gap:0}
+.day-faces .avatar.sprite{width:26px;height:26px;margin-left:-6px;box-shadow:0 0 0 2px #f6f6ec}
+.day-faces .avatar.sprite:first-child{margin-left:0}
+.day-faces small{margin-left:8px}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.photo-cell{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#eef0e2;padding:0;border:0;cursor:pointer}
+.photo-cell img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-cell.add{display:grid;place-items:center;color:#137b4e}
+.photo-cell.add .ui-icon{width:28px;height:28px}
+.photo-cell.missing::after{content:'写真なし';position:absolute;inset:0;display:grid;place-items:center;font-size:14px;color:var(--muted)}
+.photo-view{text-align:center}
+.photo-view img{max-width:100%;max-height:60vh;border-radius:14px}
+label.photo-cell input[type=file],label.photo-btn input[type=file]{display:none!important}
