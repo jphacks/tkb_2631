@@ -845,3 +845,6 @@ dialog .icon-btn{width:48px;height:48px;min-width:48px;min-height:48px}
 /* がんばりレポート：仲間に追加と同じ濃いめの黄色に白い文字（記録があってもなくても） */
 .day-record-btn,.day-record-btn.empty{background:var(--yellow-strong);color:#fffef8;font-weight:700}
 .day-record-btn .ui-icon{color:#fffef8}
+/* がんばりレポート：下メニューと同じ黄色（--yellow）に白い文字。白が沈まないよう、ごく薄い影をつける */
+.day-record-btn,.day-record-btn.empty{background:var(--yellow);color:#fff;text-shadow:0 1px 2px rgba(107,90,30,.45)}
+.day-record-btn .ui-icon{color:#fff;filter:drop-shadow(0 1px 1.5px rgba(107,90,30,.45))}
