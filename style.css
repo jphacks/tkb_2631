@@ -729,3 +729,5 @@ nav .nav-profile{display:flex!important;align-items:center;justify-content:cente
 .calendar .day.chosen:not(.is-today){background:#fffef8;box-shadow:inset 0 0 0 2px #188358;color:#163d28}
 /* 「M月D日のタスク」を押すと、その日の月のカレンダーに戻る */
 .day-jump{padding:0;background:none;color:inherit;font:inherit;text-align:left;border-radius:0}
+/* マイページの数字（単位も）は緑 */
+.stats strong,.stats strong small{color:var(--green)}
