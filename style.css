@@ -304,3 +304,10 @@ aside{height:calc(66px + env(safe-area-inset-bottom));padding-bottom:calc(6px + 
 .history-with{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .history-with button{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border:0;border-radius:20px;background:#e8edd9;font:inherit;font-size:12px;font-weight:700;color:#1d5a3a;cursor:pointer}
 .history-with .avatar.sprite{width:24px;height:24px}
+/* 設定 */
+.settings-group{margin:16px 0 2px;font-size:12px;font-weight:700;color:#137b4e}
+#settingsForm .settings-group:first-child{margin-top:4px}
+#settingsForm label:not(.switch-row){font-size:14px;margin-top:8px}
+#settingsForm select{margin-top:6px;padding:10px}
+.switch-row span small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.settings-reset{display:block;margin:4px auto 0;font-size:13px;color:#b24a3a}
