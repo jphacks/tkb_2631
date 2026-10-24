@@ -5,24 +5,19 @@ function icon(name){if(name==='portrait')return `<span class="ui-icon avatar spr
 const $=s=>document.querySelector(s),main=$('#main');
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 let today=new Date(),todayISO=iso(today);
-const defaults={points:120,rice:0,minutes:0,sessions:0,tasks:[{id:1,title:'レポートの下書きを仕上げる',date:todayISO,subject:'心理学概論',done:false,demo:true},{id:2,title:'英語の課題 Unit 3',date:todayISO,subject:'英語コミュニケーション',done:false,demo:true},{id:3,title:'ゼミの発表テーマを考える',date:todayISO,subject:'基礎ゼミ',done:false,demo:true},{id:4,title:'履修登録を確認する',date:todayISO,subject:'大学生活',done:true,demo:true}]};
-// 慶應義塾 湘南藤沢キャンパス（SFC）で実際に会う想定。建物名は公式キャンパスマップ（keio.ac.jp/ja/about/campus/sfc/map/）より
+const defaults={points:120,rice:0,minutes:0,sessions:0,tasks:[{id:1,title:'レポートの下書きを仕上げる',date:todayISO,subject:'心理学概論',done:false,demo:true},{id:2,title:'英語の課題 Unit 3',date:todayISO,subject:'英語コミュニケーション',done:false,demo:true},{id:3,title:'ゼミの発表テーマを考える',date:todayISO,subject:'基礎ゼミ',done:false,demo:true},{id:4,title:'履修登録を確認する',date:todayISO,subject:'大学生活',done:true,demo:true}], history:{} };
 const ONLINE='オンライン';
 const sfcPlaces=['Μ館 メディアセンター','Σ館 鴨池ラウンジ','学生ラウンジ（鴨池テラス）','κ館','ε館','ι館','ο館','λ館','Θ館','Δ館','Ω館','Α館（本館）'];
 const people={aya:{name:'あや',avatar:1,department:'総合政策学部',year:'1年生'},riku:{name:'りく',avatar:0,department:'環境情報学部',year:'1年生'},ken:{name:'けん',avatar:2,department:'環境情報学部',year:'2年生'},mio:{name:'みお',avatar:3,department:'看護医療学部',year:'1年生'}};
-// 作業場（お試し用）：cycle 分ごとに minutes 分の回がくり返される。時刻から今の回を計算するので保存しない
-// お試しの作業場・お試しの人（入ってくる人、拍手、スタンプの返事）。作業場を本当に共有するようになったので、紛らわしくないよう止めている
 const demoRooms=false;
-const roomTemplates=[{key:'aya',host:'aya',dayOnly:true,type:'レポート',title:'レポートを書く会',place:'Μ館 メディアセンター',minutes:25,cycle:30,offset:0,capacity:4,mark:'窓側の席・赤いトートバッグ',members:[['aya','政策分析のレポート'],['mio','看護学概論のレポート']]},{key:'riku',host:'riku',type:'語学',title:'英単語もくもく',place:'学生ラウンジ（鴨池テラス）',minutes:15,cycle:20,offset:7,capacity:4,mark:'青いパーカー・英単語帳',members:[['riku','英単語を100個']]},{key:'ken',host:'ken',type:'試験対策',title:'過去問を解く',place:'κ館',minutes:50,cycle:60,offset:20,capacity:4,mark:'黄色いノートPCケース',members:[['ken','線形代数の過去問']]},{key:'mio',host:'mio',nightOnly:true,type:'勉強',title:'夜のもくもく会',place:'オンライン',minutes:25,cycle:30,offset:10,capacity:6,members:[['mio','看護学のノートまとめ'],['aya','英語のリーディング']]}];
-// 自分の作業場に来る人：場所と時間帯で変える（夜のオンラインはみお、鴨池まわりはりく、メディアセンターはあや、それ以外はけん）
+const roomTemplates=[{key:'aya',host:'aya',dayOnly:true,type:'レポート',title:'レポートを書く会',place:'Μ館 メディアセンター',minutes:25,cycle:30,offset:0,capacity:4,mark:'窓側の席・赤いトートバッグ',members:[['aya','政策分析のレポート'],['mio','看護学概論のレポート']]},{key:'riku',host:'riku',type:'語学',title:'英単語もくもく',place:'学生ラウンジ（鴨池テラス）',minutes:15,cycle:20,offset:7,capacity:4,mark:'青いパーカー・英単語帳',members:[['riku','英単語を100個']]},{key:'ken',host:'ken',type:'試験対策',title:'過去問を解く',place:'κ館',minutes:50,cycle:60,offset:20,capacity:4,mark:'黄色いノートPCケース',members:[['ken','線形代数的過去問']]},{key:'mio',host:'mio',nightOnly:true,type:'勉強',title:'夜のもくもく会',place:'オンライン',minutes:25,cycle:30,offset:10,capacity:6,members:[['mio','看護学のノートまとめ'],['aya','英語のリーディング']]}];
 const guestTasks={aya:'レポートの見直し',riku:'英語の予習',ken:'プログラミング課題',mio:'看護学のノートまとめ'};
-function pickGuest(place){const night=skyKind()==='night',k=place===ONLINE?(night?'mio':'riku'):/鴨池/.test(place)?'riku':/メディアセンター/.test(place)?(night?'ken':'aya'):'ken';return [k,guestTasks[k]]}
+function pickGuest(place){const night=skyKind()==='night',k=place===ONLINE?(night?'mio':'rki'):/鴨池/.test(place)?'riku':/メディアセンター/.test(place)?(night?'ken':'aya'):'ken';return [k,guestTasks[k]||guestTasks['ken']]}
 const roomGuest=r=>r.guest||['ken',guestTasks.ken];
 let state;try{state=JSON.parse(localStorage.getItem('tanboru-v1'))||structuredClone(defaults)}catch{state=structuredClone(defaults)}
 function normalizeState(){
  state.roomHistory=(state.roomHistory||[]).slice(0,20);
  for(const k of ['seedMeetings','recruitments','joined','meetingSeedDate'])delete state[k];
- // 最初から入っているお試し用タスク（編集していないもの）は、いつ開いても「今日まで」になるようにする
  state.tasks.forEach(t=>{const d=defaults.tasks.find(x=>x.id===t.id);if(t.demo===undefined&&d&&d.title===t.title&&d.subject===t.subject)t.demo=true;if(t.demo)t.date=todayISO});
  state.togetherPoints ||= 0;
  state.recentTogether=(state.recentTogether||[]).filter(k=>people[k]);
@@ -31,7 +26,7 @@ function normalizeState(){
  if(![...sfcPlaces,ONLINE].includes(state.roomPlace))state.roomPlace=sfcPlaces[0];
  state.settings={hideCompleted:false,vibrate:true,sound:false,notify:false,...state.settings};
  state.pantry={...state.pantry};
- // 以前の図鑑（お米3/6/9カップで解放）で解放済みだった料理は、つくったことにして引き継ぐ
+ state.history ||= {};
  if(!state.cooked){state.cooked={};Object.entries({onigiri:3,curry:6,omurice:9}).forEach(([k,n])=>{if(state.rice>=n)state.cooked[k]=1})}delete state.settings.focusLock;
  state.connections=[...new Set((state.connections||[]).map(c=>typeof c==='number'?({1:'aya',2:'riku',3:'ken'})[c]:c).filter(c=>people[c]))];
 }
@@ -42,18 +37,16 @@ let page='home',duration=state.duration||25,remaining=(state.duration||25)*60,de
 let saveFailed=false,sessionId=null,sessionTask=null,roomsKey='',wakeLock=null,audioCtx=null;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function save(){state.timer={duration,remaining,deadline,running,sessionId,sessionTask};try{localStorage.setItem('tanboru-v1',JSON.stringify(state));if(saveFailed){saveFailed=false;$('#toast').classList.remove('show');$('#toast').classList.remove('save-error')}return true}catch{saveFailed=true;clearTimeout(window.toastTimer);const el=$('#toast');el.innerHTML='<span>変更を保存できませんでした。再読み込みせず、もう一度お試しください。</span><div><button id="retrySave">再試行</button><button id="dismissSaveError" aria-label="通知を閉じる">×</button></div>';el.classList.add('save-error');el.classList.add('show');el.setAttribute?.('role','alert');return false}}
-// 文の長さに合わせて表示時間を延ばす（最長4秒）。pic を渡すと小さなイラストを添える
 function toast(s,pic){if(saveFailed)return;const el=$('#toast');el.innerHTML=(pic&&suppliedAssets[pic]?`<img class="toast-art" src="${suppliedAssets[pic]}" alt="">`:'')+`<span>${esc(s)}</span>`;el.classList.remove('save-error');el.setAttribute?.('role','status');el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),Math.min(4000,1200+String(s).length*70))}
 function homeTasks(){return state.tasks.filter(t=>t.date===todayISO||(!t.done&&t.date<todayISO))}
 const menus=[['home','ホーム'],['tasks','タスク'],['friends','仲間'],['profile','マイページ']];
-// お店で買える具材と、お米と具材でつくる料理（具材や一部の料理はイラストができるまで絵文字で表示）
 const ingredients={salmon:{name:'さけ',emoji:'🐟',price:30},carrot:{name:'にんじん',emoji:'🥕',price:20},potato:{name:'じゃがいも',emoji:'🥔',price:20},onion:{name:'たまねぎ',emoji:'🧅',price:20},egg:{name:'たまご',emoji:'🥚',price:20},tomato:{name:'トマト',emoji:'🍅',price:30},shrimp:{name:'えび',emoji:'🦐',price:30},chicken:{name:'とりにく',emoji:'🍗',price:30}};
 const recipes=[{key:'tkg',name:'たまごかけごはん',emoji:'🍚',rice:1,items:{egg:1}},{key:'onigiri',name:'おにぎり',sprite:8,rice:1,items:{salmon:1}},{key:'curry',name:'カレーライス',sprite:9,rice:2,items:{carrot:1,potato:1,onion:1}},{key:'omurice',name:'オムライス',sprite:10,rice:2,items:{egg:2,tomato:1,onion:1}},{key:'sushi',name:'おすし',emoji:'🍣',rice:2,items:{salmon:2}},{key:'tendon',name:'えび天丼',emoji:'🍤',rice:2,items:{shrimp:2,egg:1}},{key:'bento',name:'おべんとう',emoji:'🍱',rice:2,items:{chicken:1,egg:1,carrot:1}}];
 const dishArt=(r,cls='')=>r.sprite?`<div class="food-art sprite s${r.sprite} ${cls}" role="img" aria-label="${r.name}"></div>`:`<div class="food-art food-emoji ${cls}" role="img" aria-label="${r.name}">${r.emoji}</div>`;
 const cookedCount=()=>recipes.filter(r=>state.cooked[r.key]).length;
 function collectRate(){const got=cookedCount(),pct=Math.round(got/recipes.length*100);return `<div class="collect-rate"><div class="between"><b>コレクション ${got} / ${recipes.length}</b><span>${pct}%</span></div><div class="progress collect-progress"><div style="width:${pct}%"></div></div></div>`}
 function stage(){return state.points>=300?'収穫のとき':state.points>=200?'実りの時期':state.points>=100?'すくすく期':'田植えの時期'}
-function farm(){const level=Math.min(6,Math.floor(state.points/60)+1);const rice='rice_stage_0'+level;const places=[[50,27],[44,32],[56,33],[25,46],[20,51],[31,52],[73,46],[68,51],[79,52],[49,65],[43,70],[55,71]];const sky=skyKind(),w=freshWeather();return `<div class="farmart supplied-field sky-${sky}" role="img" aria-label="${stage()}の田んぼ"><div class="field-land"></div>${w?`<span class="weather-chip">SFC ${weatherLabel(w.code)} ${w.temp}℃</span>`:''}${sky==='clear'&&(!w||w.code<=1)?art('sun','field-sun'):''}${art('mountain','field-mountain')}${art('hill','field-hill')}${art('university','field-university')}${art('tree','field-tree')}<div class="paddy-scene">${art('paddy_4_plots','field-paddy')}${places.map(([x,y])=>`<img class="field-rice" src="${suppliedAssets[rice]}" alt="" style="left:${x}%;top:${y}%">`).join('')}</div>${art('students_study_02','field-students')}${art('rice_mascot_normal','field-mascot')}${art('bush','field-bush')}${art('flower','field-flower')}</div>`}
+function farm(){const level=Math.min(6,Math.floor(state.points/60)+1);const rice='rice_stage_0'+level;const places=[[50,27],[44,32],[56,33],[25,46],[20,51],[31,52],[73,46],[68,51],[79,52],[49,65],[43,70],[55,71]];const sky=skyKind(),w=freshWeather();return `<div class="farmart supplied-field sky-${sky}" role="img" aria-label="${stage()}の田んぼ"><div class="field-land"></div>${w?`<span class="weather-chip">${w.label} ${w.temp||''}</span>`:''}${sky==='clear'&&(!w||w.code<=1)?art('sun','field-sun'):''}${art('mountain','field-mountain')}${art('hill','field-hill')}${art('university','field-university')}${art('tree','field-tree')}<div class="paddy-scene">${art('paddy_4_plots','field-paddy')}${places.map(([x,y])=>`<img class="field-rice" src="${suppliedAssets[rice]}" alt="" style="left:${x}%;top:${y}%">`).join('')}</div>${art('students_study_02','field-students')}${art('rice_mascot_normal','field-mascot')}${art('bush','field-bush')}${art('flower','field-flower')}</div>`}
 function farmFriends(){const list=state.connections.map(k=>people[k]);if(!list.length)return `<button class="farm-friends empty" data-page="friends" aria-label="仲間をさがす">${art('students_group_02','farm-friends-art','')}<span>仲間と一緒に育てよう</span>${icon('right')}</button>`;return `<button class="farm-friends" data-friend-view="people" data-page="friends" aria-label="一緒に育てる仲間"><span class="farm-faces">${list.slice(0,3).map(p=>`<span class="avatar sprite s${p.avatar}"></span>`).join('')}</span><span class="farm-friends-text">${list.slice(0,2).map(p=>esc(p.name)).join('・')}${list.length>2?` ほか${list.length-2}人`:''}と育て中</span>${state.togetherPoints?`<span class="farm-together">+${state.togetherPoints}pt</span>`:''}${icon('right')}</button>`}
 function head(title){return `<div class="heading"><div><h1>${title}</h1></div><span class="date">${today.toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'long'})}</span></div>`}
 function taskRows(tasks,expanded=false){
@@ -65,8 +58,7 @@ function taskRows(tasks,expanded=false){
  taskPage=Math.max(0,Math.min(taskPage,Math.ceil(tasks.length/size)-1));
  return tasks.length?tasks.slice(taskPage*size,(taskPage+1)*size).map(t=>`<div class="task ${t.done?'done':''}"><input type="checkbox" aria-label="${esc(t.title)}を完了" data-task="${t.id}" ${t.done?'checked':''}><div><button class="task-title" data-edit-task="${t.id}" aria-label="${esc(t.title)}を編集"><strong>${esc(t.title)}</strong><span class="task-edit-hint">${icon('edit')}</span></button><small>${esc(t.subject)}${t.focusMinutes?` · 集中 ${t.focusMinutes}分`:''}</small></div><span class="tag ${!t.done&&t.date<=todayISO?'urgent':''}">${t.done?'完了':t.date<todayISO?'期限超過':t.date===todayISO?'今日まで':'予定'}</span>${page==='tasks'?`<button class="task-delete" data-delete-task="${t.id}" aria-label="${esc(t.title)}を削除" title="タスクを削除">${icon('trash')}</button>`:''}</div>`).join('')+(tasks.length>size?`<div class="pager"><button aria-label="前のタスク" data-task-next="-1" ${taskPage===0?'disabled':''}>‹</button><span>${taskPage+1} / ${Math.ceil(tasks.length/size)}</span><button aria-label="次のタスク" data-task-next="1" ${(taskPage+1)*size>=tasks.length?'disabled':''}>›</button></div>`:''):'<div class="empty">表示するタスクはありません。</div>';
 }
-function render(){if(page==='focus'){page='friends';friendView='rooms'}document.body.dataset.page=page;document.body.dataset.sky=skyKind(); $('#nav').innerHTML=menus.map(([p,l])=>`<button data-page="${p}" class="${(page===p||(p==='profile'&&page==='collection'))?'active':''}" aria-label="${l}" title="${l}" ${(page===p||(p==='profile'&&page==='collection'))?'aria-current="page"':''}>${navIcon(p)}</button>`).join('');if(page==='home'){main.innerHTML=head('みんなで育てよう')+`<div class="grid"><section class="card farm">${farm()}<div class="farmbottom"><div class="between"><b>${stage()}</b><span class="subtle">${state.points} / 300 pt</span></div><div class="progress"><div style="width:${Math.min(100,state.points/3)}%"></div></div>${farmFriends()}${state.points>=300?'<button class="primary" data-harvest style="margin-top:15px;width:100%">実りを収穫する</button>':''}</div></section>${quickFocus()}</div><div class="grid lowgrid"><section class="card"><div class="between"><h2 class="sectiontitle">今日のタスク <span class="taskcount">${homeTasks().filter(t=>t.done).length} / ${homeTasks().length}</span></h2><button class="textbtn icon-btn" data-add aria-label="タスクを追加" title="タスクを追加">${icon('plus')}</button></div>${taskRows(homeTasks())}</section></div>`}else if(page==='tasks'){main.innerHTML=head('今日のやることを見つけよう')+`<div class="grid"><section class="card"><div class="between"><button class="textbtn icon-btn" data-month="-1" aria-label="前月" title="前月">${icon('left')}</button><div class="month-heading"><h2 class="sectiontitle">${month.getFullYear()}年 ${month.getMonth()+1}月</h2><button class="textbtn" id="goToday">今日へ戻る</button></div><button class="textbtn icon-btn" data-month="1" aria-label="翌月" title="翌月">${icon('right')}</button></div><div class="calendar">${['月','火','水','木','金','土','日'].map(x=>`<div class="week">${x}</div>`).join('')}${calendar()}</div></section><section class="card"><div class="between"><h2 class="sectiontitle">${selectedDate.slice(5).replace('-','月')}日のタスク</h2><button class="textbtn icon-btn" data-add aria-label="タスクを追加" title="タスクを追加">${icon('plus')}</button></div>${taskRows(state.tasks.filter(t=>t.date===selectedDate))}</section></div>`}else if(page==='friends'){main.innerHTML=renderFriends();}else if(page==='collection'){main.innerHTML=head('実りをあつめよう <button class="textbtn icon-btn back-profile" data-page="profile" aria-label="マイページに戻る" title="戻る">'+icon('left')+'</button>')+`<section class="card"><div class="between"><div><h2 class="harvest-heading"><span>収穫したお米</span><span class="harvest-amount">${state.rice}<small>カップ</small></span></h2><p class="subtle">300 pt → お米3カップ</p></div><button class="primary" data-harvest ${state.points<300?'disabled':''}>${state.points>=300?'収穫する':'あと '+(300-state.points)+' pt'}</button></div><div class="progress"><div style="width:${Math.min(100,state.points/3)}%"></div></div>${collectRate()}<div class="between kitchen-head"><h2 class="sectiontitle">料理をつくろう</h2></div><div class="collect">${recipes.map(r=>{const made=state.cooked[r.key]||0;return `<button class="dish" data-recipe="${r.key}" aria-label="${r.name}のレシピ">${made?'':`<span class="food-lock" aria-label="未登録">${icon('lock')}</span>`}${dishArt(r,made?'':'locked')}<b>${r.name}</b><p>${canCook(r)?'つくれる！':made?made+'回つくった':'レシピを見る'}</p></button>`}).join('')}</div><button class="shop-entry" id="openShop"><span class="shop-entry-icon" aria-hidden="true">🧺</span><span><b>お店で具材を買う</b><small>もっているポイント ${state.points} pt</small></span>${icon('right')}</button></section>`}else{main.innerHTML=`<section class="card profile-card"><div class="profile-identity"><span class="avatar sprite s${state.profile.avatar}" role="img" aria-label="プロフィールアイコン"></span><div><h2>${esc(state.profile.name)}</h2><p>${esc(state.profile.university)} · ${esc(state.profile.year)}</p>${state.profile.department?`<p>${esc(state.profile.department)}</p>`:''}</div><button class="textbtn icon-btn" id="editProfile" aria-label="プロフィールを編集" title="プロフィールを編集">${icon('edit')}</button></div><p class="stats-label">累計</p><div class="stats"><div><strong>${state.minutes}<small>分</small></strong><span>集中時間</span></div><div><strong>${state.completedTaskIds.length}</strong><span>完了したタスク</span></div><div><strong>${new Set(state.roomHistory.flatMap(h=>h.with)).size}<small>人</small></strong><span>いっしょに集中</span></div></div><button class="profile-collection" data-page="collection">${art('rice_bundle','collection-entry-art','')}<span><b>収穫・図鑑</b><small>お米 ${state.rice} カップ · 図鑑 ${cookedCount()} / ${recipes.length}</small></span>${icon('right')}</button><button class="profile-settings" id="openSettings">${icon('settings')}<span>設定</span>${icon('right')}</button></section>`}fitTasks()}
-// 画面に収まらない分は次のページへ送る（スクロールなしのレイアウトでページ送りが隠れないように）
+function render(){if(page==='focus'){page='friends';friendView='rooms'}document.body.dataset.page=page;document.body.dataset.sky=skyKind(); $('#nav').innerHTML=menus.map(([p,l])=>`<button data-page="${p}" class="${(page===p||(p==='profile'&&page==='collection'))?'active':''}" aria-label="${l}" title="${l}" ${(page===p||(p==='profile'&&page==='collection'))?'aria-current="page"':''}>${navIcon(p)}</button>`).join('');if(page==='home'){main.innerHTML=head('みんなで育てよう')+`<div class="grid"><section class="card farm">${farm()}<div class="farmbottom"><div class="between"><b>${stage()}</b><span class="subtle">${state.points} / 300 pt</span></div><div class="progress"><div style="width:${Math.min(100,state.points/3)}%"></div></div>${farmFriends()}${state.points>=300?'<button class="primary" data-harvest style="margin-top:15px;width:100%">実りを収穫する</button>':''}</div></section>${quickFocus()}</div><div class="grid lowgrid"><section class="card"><div class="between"><h2 class="sectiontitle">今日のタスク <span class="taskcount">${homeTasks().filter(t=>t.done).length} / ${homeTasks().length}</span></h2><button class="textbtn icon-btn" data-add aria-label="タスクを追加" title="タスクを追加">${icon('plus')}</button></div>${taskRows(homeTasks())}</section></div>`}else if(page==='tasks'){main.innerHTML=head('今日のやることを見つけよう')+`<div class="grid"><section class="card"><div class="between"><button class="textbtn icon-btn" data-month="-1" aria-label="前月" title="前月">${icon('left')}</button><div class="month-heading"><h2 class="sectiontitle">${month.getFullYear()}年 ${month.getMonth()+1}月</h2><button class="textbtn" id="goToday">今日へ戻る</button></div><button class="textbtn icon-btn" data-month="1" aria-label="翌月" title="翌月">${icon('right')}</button></div><div class="calendar">${['月','火','水','木','金','土','日'].map(x=>`<div class="week">${x}</div>`).join('')}${calendar()}</div></section><section class="card"><div class="between"><h2 class="sectiontitle">${selectedDate.slice(5).replace('-','月')}日のタスク</h2><button class="textbtn icon-btn" data-add aria-label="タスクを追加" title="タスクを追加">${icon('plus')}</button></div>${taskRows(state.tasks.filter(t=>t.date===selectedDate))}</section></div>`}else if(page==='friends'){main.innerHTML=renderFriends();}else if(page==='collection'){main.innerHTML=head('実りをあつめよう <button class="textbtn icon-btn back-profile" data-page="profile" aria-label="マイページに戻る" title="戻る">'+icon('left')+'</button>')+`<section class="card"><div class="between"><div><h2 class="harvest-heading"><span>収穫したお米</span><span class="harvest-amount">${state.rice}<small>カップ</small></span></h2><p class="subtle">300 pt → お米3カップ</p></div><button class="primary" data-harvest ${state.points<300?'disabled':''}>${state.points>=300?'収穫する':'あと '+(300-state.points)+' pt'}</button></div><div class="progress"><div style="width:${Math.min(100,state.points/3)}%"></div></div>${collectRate()}<div class="between kitchen-head"><h2 class="sectiontitle">料理をつくろう</h2></div><div class="collect">${recipes.map(r=>{const made=state.cooked[r.key]||0;return `<button class="dish" data-recipe="${r.key}" aria-label="${r.name}のレシピ">${made?'':`<span class="food-lock" aria-label="未登録">${icon('lock')}</span>`}${dishArt(r,made?'':'locked')}<b>${r.name}</b><p>${canCook(r)?'つくれる！':made?made+'回つくった':'レシピを見る'}</p></button>`}).join('')}</div><button class="shop-entry" id="openShop"><span class="shop-entry-icon" aria-hidden="true">🧺</span><span><b>お店で具材を買う</b><small>もっているポイント ${state.points} pt</small></span>${icon('right')}</button></section>`}else{main.innerHTML=`<section class="card profile-card"><div class="profile-identity"><span class="avatar sprite s${state.profile.avatar}" role="img" aria-label="プロフィールアイコン"></span><div><h2>${esc(state.profile.name)}</h2><p>${esc(state.profile.university)} · ${esc(state.profile.year)}</p>${state.profile.department?`<p>${esc(state.profile.department)}</p>`:''}</div><button class="textbtn icon-btn" id="editProfile" aria-label="プロフィールを編集" title="プロフィールを編集">${icon('edit')}</button></div><p class="stats-label">累計</p><div class="stats"><div><strong>${state.minutes}<small>分</small></strong><span>集中時間</span></div><div><strong>${state.completedTaskIds.length}</strong><span>完了したタスク</span></div><div><strong>${new Set(state.roomHistory.flatMap(h=>h.with)).size}<small>人</small></strong><span>いっしょに集中</span></div></div>${renderHistorySummary()}<button class="profile-collection" data-page="collection">${art('rice_bundle','collection-entry-art','')}<span><b>収穫・図鑑</b><small>お米 ${state.rice} カップ · 図鑑 ${cookedCount()} / ${recipes.length}</small></span>${icon('right')}</button><button class="profile-settings" id="openSettings">${icon('settings')}<span>設定</span>${icon('right')}</button></section>`}fitTasks()}
 function fitTasks(){if(page==='home'){const f=$('.farm');if(f&&homeFit>1&&(f.getBoundingClientRect().height<innerHeight*.47||main.scrollHeight>main.clientHeight+1)){homeFit--;render()}return}if(page!=='tasks'||getComputedStyle(main).overflowY!=='hidden')return;if(taskFit>1&&main.scrollHeight>main.clientHeight+1){taskFit--;render()}}
 window.addEventListener?.('resize',()=>{clearTimeout(window.fitTimer);window.fitTimer=setTimeout(()=>{taskFit=5;homeFit=4;render()},150)});
 
@@ -80,17 +72,15 @@ setInterval(()=>{refreshDay();tickTimer();refreshRooms();refreshSky()},500);
 initializePersistentData();
 render();
 tickTimer();
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){fetchWeather();requestWakeLock();refreshDay();tickTimer()}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){fetchCampusWeather();requestWakeLock();refreshDay();tickTimer()}});
 window.addEventListener?.('focus',()=>{refreshDay();tickTimer()});
-
-
 
 function openProfileEditor(){const p=state.profile;modal(`<h2>プロフィールを編集</h2><form id="profileForm"><fieldset class="avatar-options"><legend>アイコン</legend>${[0,1,2,3].map(n=>`<label><input type="radio" name="avatar" value="${n}" ${p.avatar===n?'checked':''} aria-label="アイコン${n+1}"><span class="avatar sprite s${n}"></span></label>`).join('')}</fieldset><label>名前<input name="name" maxlength="30" required value="${esc(p.name)}"></label><label>大学<input name="university" maxlength="60" required value="${esc(p.university)}"></label><label>学部<select name="department">${['','総合政策学部','環境情報学部','看護医療学部'].map(d=>`<option value="${d}" ${p.department===d?'selected':''}>${d||'選ばない'}</option>`).join('')}${p.department&&!['総合政策学部','環境情報学部','看護医療学部'].includes(p.department)?`<option selected>${esc(p.department)}</option>`:''}</select></label><label>学年<select name="year">${['1年生','2年生','3年生','4年生','5年生','6年生','大学院生','その他'].map(y=>`<option ${y===p.year?'selected':''}>${y}</option>`).join('')}</select></label><p class="form-error" id="profileError" role="alert"></p><button class="primary icon-btn" aria-label="プロフィールを保存" title="保存">${icon('check')}</button></form>`);
 $('#profileForm').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target),name=f.get('name').trim(),university=f.get('university').trim(),avatar=Number(f.get('avatar'));if(!name||!university){$('#profileError').textContent='名前と大学を入力してください。';return}if(![0,1,2,3].includes(avatar))return;state.profile={name,university,department:f.get('department').trim(),year:f.get('year'),avatar};save();$('#modal').close();render();toast('プロフィールを保存しました')};}
 function openSettings(){const st=state.settings,times=[...new Set([15,25,50,duration])].sort((a,b)=>a-b);modal(`<h2>設定</h2><form id="settingsForm"><p class="settings-group">作業場</p><label>よく使う場所<select name="place">${[...sfcPlaces,ONLINE].map(x=>`<option ${state.roomPlace===x?'selected':''}>${x}</option>`).join('')}</select></label><label>いつもの集中時間<select name="duration">${times.map(n=>`<option value="${n}" ${duration===n?'selected':''}>${n}分</option>`).join('')}</select></label><p class="settings-group">終わりの合図</p><label class="switch-row"><span>振動</span><input type="checkbox" name="vibrate" ${st.vibrate?'checked':''}></label><label class="switch-row"><span>音<small>図書館などでは切っておくと安心</small></span><input type="checkbox" name="sound" ${st.sound?'checked':''}></label><label class="switch-row"><span>画面を閉じていても通知</span><input type="checkbox" name="notify" ${st.notify?'checked':''}></label><p class="settings-group">タスク</p><label class="switch-row"><span>完了したタスクを隠す</span><input type="checkbox" name="hideCompleted" ${st.hideCompleted?'checked':''}></label><button class="primary icon-btn" aria-label="設定を保存" title="保存">${icon('check')}</button></form><p class="settings-hint">データはこのスマホにだけ保存されます。</p><button class="textbtn settings-reset" data-reset-data>最初からやり直す</button>`);
 $('#settingsForm').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target);let notify=f.get('notify')==='on';if(notify&&'Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission()}catch{}}if(notify&&(!('Notification' in window)||Notification.permission!=='granted')){notify=false;toast('通知が許可されていません。端末の設定から変更できます')}else toast('設定を保存しました');state.settings={hideCompleted:f.get('hideCompleted')==='on',vibrate:f.get('vibrate')==='on',sound:f.get('sound')==='on',notify};if([...sfcPlaces,ONLINE].includes(f.get('place')))state.roomPlace=f.get('place');const n=Number(f.get('duration'));if(Number.isInteger(n)&&n>=1&&n<=180)setDuration(n);save();$('#modal').close();render()};}
 
-function completeTask(t,done){t.done=done;if(t.done&&!state.completedTaskIds.includes(t.id))state.completedTaskIds.push(t.id);if(t.done&&!t.rewarded){state.points+=20;t.rewarded=true;toast('ひとつ達成！ 田んぼに +20 pt','rice_stage_04')}save();render()}
+function completeTask(t,done){t.done=done;if(t.done&&!state.completedTaskIds.includes(t.id))state.completedTaskIds.push(t.id);if(t.done&&!t.rewarded){state.points+=20;t.rewarded=true;getTodayHistory().points+=20;toast('ひとつ達成！ 田んぼに +20 pt','rice_stage_04')}save();render()}
 function focusTaskId(){if(running&&sessionTask!==null)return String(sessionTask);if(state.focusTaskId==='')return '';const open=state.tasks.filter(t=>!t.done);return String((open.find(t=>String(t.id)===String(state.focusTaskId))||open[0])?.id??'')}
 function openDeleteTask(id){const task=state.tasks.find(t=>t.id===id);if(!task)return;modal(`<h2>タスクを削除しますか？</h2><p>${esc(task.title)}</p><div class="delete-actions"><button class="textbtn closemodal">やめる</button><button class="delete-confirm" data-confirm-delete-task="${id}">削除する</button></div>`)}
 function deleteTask(id){if(!state.tasks.some(t=>t.id===id))return;state.tasks=state.tasks.filter(t=>t.id!==id);if(String(state.focusTaskId)===String(id))delete state.focusTaskId;save();$('#modal').close();render();toast('タスクを削除しました')}
@@ -100,31 +90,84 @@ function renderFriends(){if(friendView!=='rooms')friendView='people';const conte
 return head(friendView==='rooms'?'いっしょに集中しよう':'仲間とつながろう')+`<div class="friend-views">${[['rooms','作業場'],['people','仲間']].map(([v,l])=>`<button data-friend-view="${v}" aria-pressed="${friendView===v}" class="${friendView===v?'selected':''}">${l}</button>`).join('')}</div>`+content}
 function openPerson(key){const p=people[key];if(!p)return;const connected=state.connections.includes(key);modal(`<div class="person-detail"><span class="avatar sprite s${p.avatar}"></span><h2>${esc(p.name)}</h2><p>${esc(p.department)} · ${esc(p.year)}</p><button class="primary meeting-join" data-connect="${key}" aria-pressed="${connected}">${connected?'仲間から外す':'仲間に追加する'}</button>${roomOf(key)&&!running?`<button class="textbtn" data-room="${roomOf(key).key}">作業場を見る</button>`:''}</div>`)}
 
-
 function navIcon(name){if(name==='profile')return `<span class="nav-art nav-face avatar sprite s${state.profile.avatar}" aria-hidden="true"></span>`;const assets={home:'paddy_4_plots',tasks:'calendar',friends:'students_group_02'};return art(assets[name],'nav-art nav-'+name,'')}
 
 function initializePersistentData(){
  let changed=false;
  restoreTimer();
  if(changed)save();
+ fetchCampusWeather();
 }
 function restoreTimer(){const t=state.timer;if(t&&Number.isInteger(t.duration)&&t.duration>=1&&t.duration<=180){duration=t.duration;remaining=Number.isFinite(t.remaining)?Math.max(0,Math.min(t.remaining,duration*60)):duration*60;running=!!t.running&&Number.isFinite(t.deadline);deadline=running?t.deadline:null;sessionId=t.sessionId||null;sessionTask=t.sessionTask??null;if(running)remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000))}if(running&&!state.room)state.room={mine:true,host:'me',title:'自由に集中',type:'勉強',endAt:deadline,joinedAt:deadline-duration*60000,joinAt:deadline+1};if(!running)state.room=null}
-// 別のタブで変更されたら、こちらの表示も最新にする
 window.addEventListener?.('storage',e=>{if(e.key!=='tanboru-v1'||!e.newValue)return;try{state=JSON.parse(e.newValue)}catch{return}normalizeState();restoreTimer();render()});
 function refreshDay(){const now=new Date(),next=iso(now);if(next===todayISO)return false;const previous=todayISO;today=now;todayISO=next;state.tasks.forEach(t=>{if(t.demo)t.date=next});save();if(selectedDate===previous){selectedDate=next;month=new Date(now.getFullYear(),now.getMonth(),1)}taskPage=0;render();return true}
-function tickTimer(){if(!running)return;remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000));if($('#time'))$('#time').textContent=timeText();if($('#quicktime'))$('#quicktime').textContent=timeText();if(remaining>0){roomTick();return}const room=state.room,others=room?roomMembers(room):[],earned=room?Math.max(1,Math.round((room.endAt-room.joinedAt)/60000)):duration,bonus=others.length?10:0,task=state.tasks.find(t=>String(t.id)===String(sessionTask));running=false;deadline=null;remaining=duration*60;if(!sessionId||state.lastCompletedSession!==sessionId){state.points+=earned*2+bonus;if(others.length)state.togetherPoints+=earned*2+bonus;state.minutes+=earned;state.sessions++;state.lastCompletedSession=sessionId;if(task)task.focusMinutes=(task.focusMinutes||0)+earned;state.recentTogether=[...new Set([...others.map(o=>o[0]),...state.recentTogether])].slice(0,6);state.roomHistory=[{at:Date.now(),place:room?.place||'',minutes:earned,task:task?.title||'',with:others.map(o=>o[0])},...state.roomHistory].slice(0,20)}sessionId=null;sessionTask=null;window.share?.leave(state.room);state.room=null;releaseWakeLock();save();render();alertDone(earned,task);const newFriends=others.map(o=>o[0]).filter(k=>!state.connections.includes(k));modal(`<h2>${others.length?`みんなで${earned}分、やりきった！`:`${earned}分間、おつかれさま！`}</h2>${others.length&&!newFriends.length?`<div class="done-faces">${['me',...others.map(o=>o[0])].map(k=>`<span class="avatar sprite s${k==='me'?state.profile.avatar:people[k].avatar}"></span>`).join('')}</div>`:`<img class="result-art asset-img" src="assets/library/focus_complete.webp" alt="集中完了">`}${task?`<p class="focus-result-task">${esc(task.title)}</p>`:''}<p class="done-points">+${earned*2+bonus} pt${bonus?'<span>いっしょに +10</span>':''}</p>${newFriends.length?`<div class="befriend-row">${newFriends.map(k=>`<button class="befriend" data-befriend="${k}" aria-label="${esc(people[k].name)}さんを仲間に追加"><span class="avatar sprite s${people[k].avatar}"></span><span class="befriend-badge">${icon('plus')}</span><small>${esc(people[k].name)}</small></button>`).join('')}</div>`:''}${task&&!task.done?`<button class="primary" data-complete-task="${task.id}">タスクを完了にする</button><button class="textbtn closemodal" data-page="home">あとで</button>`:'<button class="primary closemodal" data-page="home">田んぼへ戻る</button>'}`)}
-// 集中終了の合図：画面を見ていなくても気づけるように、振動・音・端末通知を出す
+
+function tickTimer(){
+  if(!running)return;
+  remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+  if($('#time'))$('#time').textContent=timeText();
+  if($('#quicktime'))$('#quicktime').textContent=timeText();
+  if(remaining>0){roomTick();return}
+  
+  const room=state.room,others=room?roomMembers(room):[],earned=room?Math.max(1,Math.round((room.endAt-room.joinedAt)/60000)):duration,bonus=others.length?10:0,task=state.tasks.find(t=>String(t.id)===String(sessionTask));
+  running=false;
+  deadline=null;
+  remaining=duration*60;
+
+  if(!sessionId||state.lastCompletedSession!==sessionId){
+    let earnedBase=earned*2;
+    let bonusPoints=bonus;
+    
+    // マルチボーナス（参加人数に応じて加点）
+    if(others.length){
+      bonusPoints += others.length * 4;
+      others.forEach(([k])=>{
+        if(!state.connections.includes(k)){
+          state.connections.push(k);
+          toast(`🎉 ${people[k]?.name || '仲間'}さんと一緒に集中を達成し、自動で仲間になりました！`);
+        }
+      });
+    }
+
+    const totalEarned = earnedBase + bonusPoints;
+    state.points+=totalEarned;
+    if(others.length)state.togetherPoints+=totalEarned;
+    state.minutes+=earned;
+    state.sessions++;
+    state.lastCompletedSession=sessionId;
+    if(task)task.focusMinutes=(task.focusMinutes||0)+earned;
+    
+    // 履歴管理（state.history）への追加
+    const todayHist = getTodayHistory();
+    todayHist.points += totalEarned;
+    todayHist.minutes += earned;
+    todayHist.sessions += 1;
+
+    state.recentTogether=[...new Set([...others.map(o=>o[0]),...state.recentTogether])].slice(0,6);
+    state.roomHistory=[{at:Date.now(),place:room?.place||'',minutes:earned,task:task?.title||'',with:others.map(o=>o[0])},...state.roomHistory].slice(0,20)
+  }
+  
+  sessionId=null;
+  sessionTask=null;
+  window.share?.leave(state.room);
+  state.room=null;
+  releaseWakeLock();
+  save();
+  render();
+  alertDone(earned,task);
+  
+  const newFriends=others.map(o=>o[0]).filter(k=>!state.connections.includes(k));
+  modal(`<h2>${others.length?`みんなで${earned}分、やりきった！`:`${earned}分間、おつかれさま！`}</h2>${others.length&&!newFriends.length?`<div class="done-faces">${['me',...others.map(o=>o[0])].map(k=>`<span class="avatar sprite s${k==='me'?state.profile.avatar:people[k].avatar}"></span>`).join('')}</div>`:`<img class="result-art asset-img" src="assets/library/focus_complete.webp" alt="集中完了">`}${task?`<p class="focus-result-task">${esc(task.title)}</p>`:''}<p class="done-points">+${earned*2+bonus} pt${bonus?'<span>いっしょに +10</span>':''}</p>${newFriends.length?`<div class="befriend-row">${newFriends.map(k=>`<button class="befriend" data-befriend="${k}" aria-label="${esc(people[k].name)}さんを仲間に追加"><span class="avatar sprite s${people[k].avatar}"></span><span class="befriend-badge">${icon('plus')}</span><small>${esc(people[k].name)}</small></button>`).join('')}</div>`:''}${task&&!task.done?`<button class="primary" data-complete-task="${task.id}">タスクを完了にする</button><button class="textbtn closemodal" data-page="home">あとで</button>`:'<button class="primary closemodal" data-page="home">田んぼへ戻る</button>'}`)
+}
+
 function prepareAlerts(){if(!state.settings.sound)return;try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume?.()}catch{}}
 function chime(){if(!audioCtx)return;try{const t=audioCtx.currentTime;[784,988,1175].forEach((f,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0.0001,t+i*.18);g.gain.exponentialRampToValueAtTime(.25,t+i*.18+.02);g.gain.exponentialRampToValueAtTime(.0001,t+i*.18+.5);o.connect(g).connect(audioCtx.destination);o.start(t+i*.18);o.stop(t+i*.18+.55)})}catch{}}
 function alertDone(earned,task){if(state.settings.vibrate)navigator.vibrate?.([200,120,200]);if(state.settings.sound)chime();if(state.settings.notify&&document.hidden&&'Notification' in window&&Notification.permission==='granted'){try{new Notification('たんぼる',{body:`${earned}分の集中が終わりました${task?'：'+task.title:''}`,icon:'assets/icons/icon-192.png'})}catch{}}}
-// 集中中は画面が消えないようにする（対応ブラウザのみ）
 async function requestWakeLock(){try{if(running&&!wakeLock&&navigator.wakeLock&&!document.hidden){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null})}}catch{wakeLock=null}}
 function releaseWakeLock(){wakeLock?.release?.().catch?.(()=>{});wakeLock=null}
 
-// ===== 作業場 =====
 const hhmm=t=>new Date(t).toTimeString().slice(0,5);
 function roomNow(t,now=Date.now()){const c=t.cycle*60000,o=t.offset*60000,startAt=Math.floor((now-o)/c)*c+o,endAt=startAt+t.minutes*60000;return {...t,startAt,endAt,live:now<endAt,left:Math.ceil((endAt-now)/60000),nextAt:startAt+c}}
-// 自分の作業場に入ってきた人は、元の作業場からいなくなる
 function liveRooms(now=Date.now()){if(!demoRooms)return [];const guestBusy=state.room?.mine&&now>=state.room.joinAt,guestKey=state.room?.mine?roomGuest(state.room)[0]:null;const night=skyKind()==='night';return roomTemplates.filter(t=>!(guestBusy&&(t.host===guestKey||t.members.some(m=>m[0]===guestKey)))&&!(t.dayOnly&&night)&&!(t.nightOnly&&!night)).map(t=>roomNow(t,now))}
 function placeIcon(p){return icon(p===ONLINE?'online':'pin')}
 function roomJoinable(r){return r.live&&r.left>=3&&r.members.length<r.capacity}
@@ -141,31 +184,61 @@ function renderRooms(){
  const rooms=liveRooms().filter(roomJoinable);
  return `<section class="card room-create"><h2 class="sectiontitle">自分の作業場をひらく</h2><div class="room-select"><select id="roomTask" aria-label="取り組むタスク">${taskOptions()}</select>${selectArrow}</div><div class="room-select room-place">${placeIcon(state.roomPlace)}<select id="roomPlace" aria-label="集まる場所">${[...sfcPlaces,ONLINE].map(x=>`<option ${state.roomPlace===x?'selected':''}>${x}</option>`).join('')}</select>${selectArrow}</div>${state.roomPlace===ONLINE?'<p class="room-online-note">カメラなしで、同じ時間に集中します</p>':`<input id="roomMark" class="room-mark-input" maxlength="30" value="${esc(state.roomMark||'')}" placeholder="目印（例：窓側の席・青いパーカー）" aria-label="相手に見つけてもらう目印">`}<div class="room-times">${[15,25,50].map(n=>`<button data-room-duration="${n}" class="${duration===n&&!customTime?'selected':''}">${n}分</button>`).join('')}${customTime||![15,25,50].includes(duration)?`<label class="room-custom selected"><input id="roomMinutes" type="number" min="1" max="180" step="1" value="${duration}" aria-label="集中する時間（分）"><span>分</span></label>`:'<button data-room-custom>その他</button>'}<button class="primary icon-btn" data-open-room aria-label="作業場をひらいて集中する" title="ひらいて集中する">${icon('play')}</button></div></section><p class="search-count">いま集中している作業場</p><div class="room-list">${rooms.length||sharedRooms().length?'':`<div class="search-empty">いま集中している人はいません。<br>自分の作業場をひらいてみよう</div>`}${sharedRows()}${rooms.map(r=>`<button class="card room-row" data-room="${r.key}"><span class="room-faces">${faces(r.members.map(m=>m[0]))}</span><span class="room-copy"><b>${esc(people[r.host].name)}の作業場</b><small>${esc(r.place)}</small><small class="room-status">あと${r.left}分</small></span><span class="room-count">${r.members.length} / ${r.capacity}</span>${icon('right')}</button>`).join('')}</div>`}
 function quickFocus(){const r=state.room;if(running&&r)return `<section class="card quickfocus" data-go-rooms role="button" tabindex="0" aria-label="作業場を開く"><div><h2><span id="quicktime">${timeText()}</span> ${esc(roomName(r))}で集中中</h2></div><button class="primary icon-btn" data-page="friends" data-friend-view="rooms" aria-label="作業場を開く" title="作業場を開く">${icon('focus')}</button></section>`;const live=[...new Set(liveRooms().filter(roomJoinable).flatMap(r=>r.members.map(m=>m[0])))];return `<section class="card quickfocus" data-go-rooms role="button" tabindex="0" aria-label="作業場を見る"><div><h2>みんなと集中する</h2>${live.length?`<span class="quick-faces">${faces(live.slice(0,4))}<small>${live.length}人が集中中</small></span>`:''}</div><button class="primary icon-btn" data-page="friends" data-friend-view="rooms" aria-label="作業場を見る" title="作業場">${icon('focus')}</button></section>`}
-function openRoom(key){const t=roomTemplates.find(t=>t.key===key);if(!t)return;if(running){page='friends';friendView='rooms';render();toast('いまの作業場を出てから入れます');return}const r=liveRooms().find(x=>x.key===key);if(!r){toast(people[t.host].name+'さんはいま別の作業場にいます');return}if(!roomJoinable(r)){toast(people[t.host].name+'さんはいま集中していません');return}modal(`<div class="room-detail"><span class="pill">${esc(r.type)}</span><h2>${esc(people[r.host].name)}の作業場</h2><p class="room-place-line">${placeIcon(r.place)}${esc(r.place)}</p>${r.mark?`<p class="room-mark">目印：${esc(r.mark)}</p>`:''}<p class="room-time">${esc(r.title)} · あと${r.left}分</p><ul class="room-members">${r.members.map(([k,task])=>`<li><button data-person="${k}"><span class="avatar sprite s${people[k].avatar}"></span><span><b>${esc(people[k].name)}</b><small>${esc(task)}</small></span></button></li>`).join('')}</ul>${`<label class="room-label" for="joinTask">取り組むタスク</label><div class="room-select"><select id="joinTask">${taskOptions()}</select>${selectArrow}</div><button class="primary" data-join-room="${key}">${r.place===ONLINE?'オンラインで参加する':'ここで合流して集中する'}</button>`}</div>`)}
+function openRoom(key){const t=roomTemplates.find(t=>t.key===key);if(!t)return;if(running){page='friends';friendView='rooms';render();toast('いまの作業場を出てから入れます');return}const r=liveRooms().find(x=>x.key===key);if(!r){toast(people[t.host].name+'さんはいま別の作業場にいます');return}if(!roomJoinable(r)){toast(people[t.host].name+'さんはいま集中していません');return}modal(`<div class="room-detail"><span class="pill">${esc(r.type)}</span><h2>${esc(people[t.host].name)}の作業場</h2><p class="room-place-line">${placeIcon(r.place)}${esc(r.place)}</p>${r.mark?`<p class="room-mark">目印：${esc(r.mark)}</p>`:''}<p class="room-time">${esc(r.title)} · あと${r.left}分</p><ul class="room-members">${r.members.map(([k,task])=>`<li><button data-person="${k}"><span class="avatar sprite s${people[k].avatar}"></span><span><b>${esc(people[k].name)}</b><small>${esc(task)}</small></span></button></li>`).join('')}</ul>${`<label class="room-label" for="joinTask">取り組むタスク</label><div class="room-select"><select id="joinTask">${taskOptions()}</select>${selectArrow}</div><button class="primary" data-join-room="${key}">${r.place===ONLINE?'オンラインで参加する':'ここで合流して集中する'}</button>`}</div>`)}
 function joinRoom(key){const r=liveRooms().find(x=>x.key===key);if(!r||!roomJoinable(r)||running){$('#modal').close();render();toast('この作業場にはいま入れません');return}startSession({mine:false,key,host:r.host,title:r.title,type:r.type,place:r.place,mark:r.mark,endAt:r.endAt,members:r.members,arrived:r.place===ONLINE},$('#joinTask')?.value??focusTaskId());toast(people[r.host].name+'さんの作業場に入りました')}
 function openOwnRoom(){if(running)return;const n=Number($('#roomMinutes')?.value||duration);if(!Number.isInteger(n)||n<1||n>180){toast('1〜180分で入力してください');return}setDuration(n);const taskId=$('#roomTask')?.value??focusTaskId(),task=state.tasks.find(t=>String(t.id)===String(taskId)),now=Date.now();const place=$('#roomPlace')?.value||state.roomPlace,online=place===ONLINE,mark=online?'':($('#roomMark')?.value??state.roomMark??'').trim().slice(0,30);state.roomPlace=place;state.roomMark=mark;startSession({mine:true,host:'me',title:task?task.title:'自由に集中',type:'勉強',place,mark,guest:pickGuest(place),endAt:now+n*60000,joinAt:now+15000,arriveAt:online?now+15000:now+40000},taskId);const r=state.room;window.share?.publish({hostName:state.profile.name,avatar:state.profile.avatar,place:r.place,mark:r.mark,title:r.title,endAt:r.endAt,capacity:4});toast('作業場をひらきました')}
 function startSession(room,taskId){const now=Date.now();state.room={...room,joinedAt:now};running=true;deadline=room.endAt;remaining=Math.ceil((deadline-now)/1000);sessionId='room-'+now+'-'+Math.random().toString(36).slice(2);sessionTask=String(taskId);if(taskId!=='')state.focusTaskId=String(taskId);prepareAlerts();requestWakeLock();save();if($('#modal').open)$('#modal').close();page='friends';friendView='rooms';render()}
 function focusedMinutes(){return state.room?Math.max(0,Math.floor((Math.min(Date.now(),state.room.endAt)-state.room.joinedAt)/60000)):0}
-// 途中で出たときは、それまでの分を半分のポイント（1分=1pt）にする
 function leaveRoom(){const m=focusedMinutes(),room=state.room,others=room?roomMembers(room).map(o=>o[0]):[],task=state.tasks.find(t=>String(t.id)===String(sessionTask));if(m>=1){state.points+=m;state.minutes+=m;if(task)task.focusMinutes=(task.focusMinutes||0)+m;if(others.length){state.recentTogether=[...new Set([...others,...state.recentTogether])].slice(0,6);state.roomHistory=[{at:Date.now(),place:room.place||'',minutes:m,task:task?.title||'',with:others,left:true},...state.roomHistory].slice(0,20)}}running=false;deadline=null;remaining=duration*60;sessionId=null;sessionTask=null;window.share?.leave(state.room);state.room=null;releaseWakeLock();save();$('#modal').close();render();toast(m>=1?`作業場を出ました（+${m} pt）`:'作業場を出ました')}
-// 集中中のできごと：自分の作業場に人が入ってくる・途中で拍手が届く
 function roomTick(){const r=state.room;if(!r)return;const now=Date.now();if(demoRooms&&r.mine&&!r.joinNotified&&now>=r.joinAt){r.joinNotified=true;save();toast(people[roomGuest(r)[0]].name+(r.place===ONLINE?'さんがオンラインで入りました':'さんが作業場に向かっています'),'rice_mascot_happy');if(page==='friends'&&friendView==='rooms')render()}if(r.mine&&r.place!==ONLINE&&r.joinNotified&&!r.arriveNotified&&now>=r.arriveAt){r.arriveNotified=true;save();toast(people[roomGuest(r)[0]].name+'さんが着きました。目印で見つけてもらえました','rice_mascot_happy');if(page==='friends'&&friendView==='rooms'&&!$('#modal').open)render()}const others=roomMembers(r);if(demoRooms&&!r.cheered&&others.length&&now>=r.joinedAt+(r.endAt-r.joinedAt)/2){r.cheered=true;save();toast(people[others[0][0]].name+'さんから「'+(Math.random()<.5?'いいね':'がんばろう')+'」','rice_mascot_happy')}const rice=$('#roomRice'),src=suppliedAssets[riceFor(r)];if(rice&&!rice.src.endsWith(src))rice.src=src}
 function riceFor(r){const p=Math.max(0,Math.min(1,(Date.now()-r.joinedAt)/Math.max(1,r.endAt-r.joinedAt)));return 'rice_stage_0'+Math.min(6,1+Math.floor(p*6))}
 function refreshRooms(){if(running||page!=='friends'&&page!=='home')return;const key=liveRooms().map(r=>r.key+r.live+r.left).join('|')+sharedRooms().map(r=>r.id+r.count+r.left).join('|');if(key===roomsKey)return;roomsKey=key;if(!$('#modal').open&&(page==='home'||friendView==='rooms'))render()}
 
-// ===== 天気と時間帯でホームの空を変える（SFC の現在の天気：Open-Meteo、登録不要） =====
-const SFC_WEATHER_URL='https://api.open-meteo.com/v1/forecast?latitude=35.3881&longitude=139.4272&current=weather_code,is_day,temperature_2m&timezone=Asia%2FTokyo';
+// 天気＆位置情報連動ボーナス
 let skyShown='';
-function freshWeather(){const w=state.weather;return w&&Date.now()-w.at<3*3600000?w:null}
-function isWet(c){return (c>=51&&c<=67)||(c>=71&&c<=86)||c>=95}
-function weatherLabel(c){return c<=1?'晴れ':c<=3?'くもり':c<=48?'霧':c<=57?'霧雨':c<=67?'雨':c<=77?'雪':c<=82?'にわか雨':c<=86?'雪':'雷雨'}
-// 夜を優先（暗い時間は夜空）、昼は雨・雪なら雨の空、それ以外は晴れの空。天気が取れないときは時刻だけで判断
-function skyKind(){const w=freshWeather(),h=new Date().getHours();if(w?!w.isDay:(h<6||h>=18))return 'night';return w&&isWet(w.code)?'rain':'clear'}
-async function fetchWeather(){if(state.weather&&Date.now()-state.weather.at<30*60000)return;try{const res=await fetch(SFC_WEATHER_URL);if(!res.ok)return;const c=(await res.json()).current;if(!c||!Number.isFinite(c.weather_code))return;state.weather={at:Date.now(),code:c.weather_code,isDay:c.is_day===1,temp:Math.round(c.temperature_2m)};save();refreshSky(true)}catch{}}
-function refreshSky(force){const k=skyKind()+(freshWeather()?.code??'');if(!force&&k===skyShown)return;const first=!skyShown;skyShown=k;if(!first&&page==='home'&&!$('#modal').open)render();else document.body.dataset.sky=skyKind();if(Date.now()-(state.weather?.at||0)>=30*60000)fetchWeather()}
-fetchWeather();
+function freshWeather(){return state.weather||null}
+function skyKind(){const w=freshWeather(),h=new Date().getHours();if(w&&w.isNight!==undefined)return w.isNight?'night':'clear';if(h<6||h>=18)return 'night';return 'clear'}
+async function fetchCampusWeather(){
+  if(!navigator.geolocation){
+    await fetchWeatherByCoords(35.3881,139.4272);
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    async pos=>await fetchWeatherByCoords(pos.coords.latitude,pos.coords.longitude),
+    async ()=>await fetchWeatherByCoords(35.3881,139.4272),
+    {timeout:10000}
+  );
+}
+async function fetchWeatherByCoords(lat,lng){
+  try{
+    const res=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`);
+    const data=await res.json();
+    const code=data.current_weather.weathercode;
+    const isNight=data.current_weather.is_day===0;
+    const isRainy=(code>=51&&code<=67)||(code>=80);
+    state.weather={code,isNight,label:isRainy?'☔ 恵みの雨ボーナス':'☀️ 晴れ・平常運転',temp:data.current_weather.temperature};
+    save();
+    if(page==='home')render();
+  }catch(e){console.error(e);}
+}
+function refreshSky(force){if(page==='home')render();}
 
-// ===== 田んぼにときどき来る生きもの（カラス・イナゴ）。タップすると逃げていく =====
+// 履歴・振り返り管理用ヘルパー
+function getTodayHistory(){
+  state.history||={};
+  state.history[todayISO]||={points:0,minutes:0,sessions:0};
+  return state.history[todayISO];
+}
+function renderHistorySummary(){
+  state.history||={};
+  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+  const yestISO=iso(yesterday);
+  const yestData=state.history[yestISO]||{points:0,minutes:0};
+  const todayData=state.history[todayISO]||{points:0,minutes:0};
+  return `<div class="card" style="margin-top:16px"><h3 class="sectiontitle" style="margin-bottom:10px">これまでの記録・振り返り</h3><p class="subtle">きのう: 獲得 <strong>${yestData.points} pt</strong> / 集中 <strong>${yestData.minutes} 分</strong></p><p class="subtle">きょう: 獲得 <strong>${todayData.points} pt</strong> / 集中 <strong>${todayData.minutes} 分</strong></p></div>`;
+}
+
+// 訪問者（カラス・イナゴ）
 let visitorTimer=null,visitorBusy=false;
 const vimg=n=>'assets/library/'+n+'.webp',pause=ms=>new Promise(r=>setTimeout(r,ms));
 const glide=(el,frames,ms)=>el.animate(frames,{duration:ms,easing:'ease-in-out',fill:'forwards'}).finished.catch(()=>{});
@@ -186,8 +259,6 @@ async function grasshopperVisit(el){let leaving=false;el.onclick=()=>{leaving=tr
  while(x<115&&el.isConnected){await hop(x+22,leaving?420:650);await pause(leaving?60:250)}}
 scheduleVisitor(true);
 
-// ===== つながりマップ：真ん中の「あなた」から、いっしょに集中した人へ水路がのびる。回数が多いほど水路が太い =====
-// 人数に合わせて「あなた」のまわりへ均等に並べる（上から時計回り）
 const mapSlot=(i,n)=>{const a=-Math.PI/2+(n===2?Math.PI/2:0)+i*2*Math.PI/n;return [50+Math.cos(a)*34,50+Math.sin(a)*32]},MAP_MAX=6;
 function togetherStats(){const st={};state.roomHistory.forEach(h=>h.with.forEach(k=>{st[k] ||= {count:0,minutes:0};st[k].count++;st[k].minutes+=h.minutes}));return st}
 function roomOf(k){const live=liveRooms().filter(roomJoinable);return live.find(t=>t.host===k)||live.find(t=>t.members.some(m=>m[0]===k))}
@@ -200,84 +271,50 @@ function renderMap(){
  const sel=mapSelected&&people[mapSelected],s0=sel&&st[mapSelected],friend=sel&&state.connections.includes(mapSelected),room=sel&&roomOf(mapSelected);
  const detail=sel?`<section class="card map-detail"><span class="avatar sprite s${sel.avatar}"></span><button class="map-detail-copy" data-map-history="${mapSelected}" aria-label="${esc(sel.name)}さん（${esc(sel.year)}）との記録を見る"><b>${esc(sel.name)}<span class="map-year">${esc(sel.year)}</span></b><small>${s0?`一緒に${s0.count}回・${s0.minutes}分`:`${esc(sel.department)} · ${esc(sel.year)}`} ›</small></button>${friend?(room&&!running?`<span class="map-now live">いま集中中</span><button class="primary" data-room="${room.key}">一緒に集中</button>`:`<span class="map-now">${running?'あなたが集中中':'いまは休憩中'}</span>`):`<button class="primary icon-btn map-add" data-connect="${mapSelected}" aria-label="${esc(sel.name)}さんを仲間に追加" title="仲間に追加">${icon('plus')}</button>`}</section>`:'';
  return `<section class="card map-card"><div class="map-head"><div><h2>つながりマップ</h2><p>${keys.length?`いっしょに集中した仲間 ${state.connections.length}人`:'作業場でいっしょに集中すると、ここに水路がのびていきます'}</p></div><span class="map-total">${icon('friends')}${state.connections.length}</span></div><div class="map-area"><svg class="map-streams" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${keys.map((k,i)=>stream(k,mapSlot(i,slots))).join('')}</svg>${deco}<button class="map-node me" style="left:50%;top:50%" data-page="profile" aria-label="マイページを開く"><span class="map-blob"><span class="avatar sprite s${state.profile.avatar}"></span></span><b>あなた</b></button>${nodes}${rest.length?(()=>{const [x,y]=mapSlot(keys.length,slots);return `<button class="map-node more" style="left:${x}%;top:${y}%" data-map-more aria-label="ほか${rest.length}人を見る"><span class="map-blob">+${rest.length}</span><b>ほか${rest.length}人</b></button>`})():''}</div>${keys.length?'':'<button class="primary map-empty-btn" data-friend-view="rooms">作業場をさがす</button>'}</section>${detail}`}
-// 人ごとの「いっしょに集中した記録」（つながりマップで人を押したとき）
-function openTogetherHistory(k){const p=people[k];if(!p)return;const list=state.roomHistory.filter(h=>h.with.includes(k));modal(`<div class="together-history"><span class="avatar sprite s${p.avatar}"></span><h2>${esc(p.name)}さんとの記録</h2><p class="settings-hint">${esc(p.department)} · ${esc(p.year)}</p>${list.length?`<ul>${list.map(h=>`<li><div class="history-top"><b>${new Date(h.at).toLocaleDateString('ja-JP',{month:'numeric',day:'numeric',weekday:'short'})} ${hhmm(h.at)}</b><span>${h.minutes}分${h.left?'（途中まで）':''}</span></div><p class="room-place-line">${placeIcon(h.place)}${esc(h.place||'')}</p><small>${esc(h.task||'自由に集中')}</small></li>`).join('')}</ul>`:'<p>まだいっしょに集中した記録はありません。</p>'}${state.connections.includes(k)?'':`<button class="primary icon-btn map-add" data-connect="${k}" aria-label="${esc(p.name)}さんを仲間に追加" title="仲間に追加">${icon('plus')}</button>`}</div>`)}
-// ポップアップの外側を押したら閉じる
+function openTogetherHistory(k){const p=people[k];if(!p)return;const list=state.roomHistory.filter(h=>h.with.includes(k));modal(`<div class="together-history"><span class="avatar sprite s${p.avatar}"></span><h2>${esc(p.name)}さんとの記録</h2><p class="settings-hint">${esc(p.department)} · ${esc(p.year)}</p>${list.length?`<ul>${list.h.map(h=>`<li><div class="history-top"><b>${new Date(h.at).toLocaleDateString('ja-JP',{month:'numeric',day:'numeric',weekday:'short'})} ${hhmm(h.at)}</b><span>${h.minutes}分${h.left?'（途中まで）':''}</span></div><p class="room-place-line">${placeIcon(h.place)}${esc(h.place||'')}</p><small>${esc(h.task||'自由に集中')}</small></li>`).join('')}</ul>`:'<p>まだいっしょに集中した記録はありません。</p>'}${state.connections.includes(k)?'':`<button class="primary icon-btn map-add" data-connect="${k}" aria-label="${esc(p.name)}さんを仲間に追加" title="仲間に追加">${icon('plus')}</button>`}</div>`)}
 $('#modal').addEventListener('click',e=>{if(e.target!==e.currentTarget)return;const r=e.currentTarget.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.currentTarget.close()});
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches?.('[data-go-rooms]')){e.preventDefault();page='friends';friendView='rooms';render()}});
-// マップに入りきらない人の一覧
 function openMapList(){const st=togetherStats(),all=[...new Set([...state.connections,...Object.keys(st),...state.recentTogether])].filter(k=>people[k]).sort((a,b)=>(st[b]?.count||0)-(st[a]?.count||0));modal(`<div class="together-history"><h2>つながっている人</h2><ul>${all.map(k=>`<li><button class="map-list-row" data-map-person="${k}" data-close-modal><span class="avatar sprite s${people[k].avatar}"></span><span><b>${esc(people[k].name)}<span class="map-year">${esc(people[k].year)}</span></b><small>${st[k]?`一緒に${st[k].count}回・${st[k].minutes}分`:esc(people[k].department)}</small></span></button></li>`).join('')}</ul></div>`)}
 
-// お店とレシピ：ポイントで具材を買い、お米と合わせて料理をつくる（つくった料理は図鑑に登録される）
-function canCook(r){return state.rice>=r.rice&&Object.entries(r.items).every(([k,n])=>(state.pantry[k]||0)>=n)}
 function openShop(){modal(`<div class="shop"><h2>お店</h2><p class="shop-points">もっているポイント <b>${state.points} pt</b></p><ul class="shop-list">${Object.entries(ingredients).map(([k,g])=>`<li><span class="shop-emoji" aria-hidden="true">${g.emoji}</span><span class="shop-name"><b>${g.name}</b><small>もっている ${state.pantry[k]||0}こ</small></span><button class="primary" data-buy="${k}" ${state.points<g.price?'disabled':''} aria-label="${g.name}を${g.price}ptで買う">${g.price} pt</button></li>`).join('')}</ul><p class="settings-hint">使ったポイントの分、田んぼの稲も小さくなります。</p></div>`)}
 function buy(key){const g=ingredients[key];if(!g||state.points<g.price)return;state.points-=g.price;state.pantry[key]=(state.pantry[key]||0)+1;save();render();openShop()}
 function openRecipe(key){const r=recipes.find(r=>r.key===key);if(!r)return;const made=state.cooked[r.key]||0,ok=canCook(r);modal(`<div class="recipe-detail">${dishArt(r,made?'':'locked')}<h2>${r.name}</h2>${made?`<p>${made}回つくりました</p>`:''}<ul class="recipe-needs"><li class="${state.rice>=r.rice?'':'short'}"><span>🍚 お米</span><span>${state.rice} / ${r.rice}カップ</span></li>${Object.entries(r.items).map(([k,n])=>{const have=state.pantry[k]||0,g=ingredients[k];return `<li class="${have>=n?'':'short'}"><span>${g.emoji} ${g.name}</span><span>${have} / ${n}</span></li>`}).join('')}</ul><button class="primary" data-cook="${r.key}" ${ok?'':'disabled'}>${ok?'つくる':'材料が足りません'}</button>${ok?'':'<button class="textbtn" id="openShop">お店で具材を買う</button>'}</div>`)}
 function cook(key){const r=recipes.find(r=>r.key===key);if(!r||!canCook(r))return;state.rice-=r.rice;Object.entries(r.items).forEach(([k,n])=>state.pantry[k]-=n);const first=!state.cooked[r.key];state.cooked[r.key]=(state.cooked[r.key]||0)+1;save();render();modal(`<h2>${r.name}ができました！</h2>${dishArt(r,'result-food')}<p>${first?'図鑑に登録しました':r.name+'を'+state.cooked[r.key]+'回つくりました'}</p><button class="primary closemodal">ごちそうさま</button>`)}
 
-// ==========================================
-// ハッカソン追加機能：イナゴ警報（よそ見検知）ロジック
-// ==========================================
-let locustTimer = null;
-let locustSecondsLeft = 10;
-
-document.addEventListener('visibilitychange', () => {
-  // タイマー稼働中（集中中）のみよそ見を検知する
-  if (!running) return;
-
-  const overlay = $('#locustOverlay');
-  if (!overlay) return;
-
-  if (document.hidden) {
-    // ユーザーが画面から離れた（別タブ・別アプリへ移動）
-    locustSecondsLeft = 10;
-    const countEl = $('#locustCountdown');
-    if (countEl) countEl.textContent = locustSecondsLeft;
-
-    // オーバーレイを表示
+let locustTimer=null,locustSecondsLeft=10;
+document.addEventListener('visibilitychange',()=>{
+  if(!running)return;
+  const overlay=$('#locustOverlay');if(!overlay)return;
+  if(document.hidden){
+    locustSecondsLeft=10;
+    const countEl=$('#locustCountdown');if(countEl)countEl.textContent=locustSecondsLeft;
     overlay.classList.add('active');
-
-    // 10秒のカウントダウン開始
     clearInterval(locustTimer);
-    locustTimer = setInterval(() => {
+    locustTimer=setInterval(()=>{
       locustSecondsLeft--;
-      if (countEl) countEl.textContent = locustSecondsLeft;
-
-      if (locustSecondsLeft <= 0) {
+      if(countEl)countEl.textContent=locustSecondsLeft;
+      if(locustSecondsLeft<=0){
         clearInterval(locustTimer);
-        // 10秒以内に戻らなかった場合（ペナルティ：ポイント没収など）
         overlay.classList.remove('active');
-        state.points = Math.max(0, state.points - 10);
-        save();
-        render();
+        state.points=Math.max(0,state.points-10);
+        save();render();
         toast('イナゴに田んぼが荒らされた… (-10 pt) 🌾😭');
       }
-    }, 1000);
-
-  } else {
-    // ユーザーがアプリ画面に戻ってきた場合
-    // ただし、visibilitychangeイベント発火のタイミングですぐ消さず、
-    // 「今すぐ作業に戻る！」ボタンを押させるか、戻ってきたらタイマーをクリアする
+    },1000);
   }
 });
-
-// 「今すぐ作業に戻る！」ボタンを押したときの処理
-document.addEventListener('click', e => {
-  if (e.target.id === 'returnFocusBtn') {
+document.addEventListener('click',e=>{
+  if(e.target.id==='returnFocusBtn'){
     clearInterval(locustTimer);
-    const overlay = $('#locustOverlay');
-    if (overlay) overlay.classList.remove('active');
+    const overlay=$('#locustOverlay');if(overlay)overlay.classList.remove('active');
     toast('セーフ！田んぼが守られました 🌾✨');
   }
 });
 
-// ===== ほかの人がひらいた作業場（share.js が Firebase から受け取って window.share.rooms に入れる） =====
 function registerPerson(k,name,avatar){people[k]={name:String(name||'だれか').slice(0,30),avatar:[0,1,2,3].includes(avatar)?avatar:0,department:'',year:'',shared:true};state.sharedPeople={...state.sharedPeople,[k]:people[k]};return k}
 function sharedRooms(){const s=window.share,now=Date.now();if(!s)return [];return s.rooms.filter(r=>r.id!==s.me&&Number.isFinite(r.endAt)&&r.endAt-now>=3*60000&&1+Object.keys(r.members||{}).length<(r.capacity||4)).map(r=>({...r,left:Math.ceil((r.endAt-now)/60000),count:1+Object.keys(r.members||{}).length}))}
-// 共有の作業場にいる人（自分以外）を [人のキー, 取り組んでいること] の形にする。先頭はひらいた人
 function remoteMembers(r){const me=window.share?.me;return [[registerPerson('u_'+r.id,r.hostName,r.avatar),r.title||'自由に集中'],...Object.entries(r.members||{}).filter(([k])=>k!==me).map(([k,m])=>[registerPerson('u_'+k,m.name,m.avatar),m.task||'自由に集中'])]}
 function sharedRows(){return sharedRooms().map(r=>`<button class="card room-row" data-shared-room="${esc(r.id)}"><span class="room-faces">${[r.avatar,...Object.values(r.members||{}).map(m=>m.avatar)].map(a=>`<span class="avatar sprite s${[0,1,2,3].includes(a)?a:0}"></span>`).join('')}</span><span class="room-copy"><b>${esc(r.hostName)}の作業場</b><small>${esc(r.place||'')}</small><small class="room-status">あと${r.left}分</small></span><span class="room-count">${r.count} / ${r.capacity||4}</span>${icon('right')}</button>`).join('')}
 function openSharedRoom(id){if(running){toast('いまの作業場を出てから入れます');return}const r=sharedRooms().find(x=>x.id===id);if(!r){toast('この作業場にはいま入れません');render();return}modal(`<div class="room-detail"><span class="pill">いっしょに集中</span><h2>${esc(r.hostName)}の作業場</h2><p class="room-place-line">${placeIcon(r.place)}${esc(r.place||'')}</p>${r.mark?`<p class="room-mark">目印：${esc(r.mark)}</p>`:''}<p class="room-time">あと${r.left}分</p><ul class="room-members">${remoteMembers(r).map(([k,task])=>`<li><button data-person="${k}"><span class="avatar sprite s${people[k].avatar}"></span><span><b>${esc(people[k].name)}</b><small>${esc(task)}</small></span></button></li>`).join('')}</ul><label class="room-label" for="joinTask">取り組むタスク</label><div class="room-select"><select id="joinTask">${taskOptions()}</select>${selectArrow}</div><button class="primary" data-join-shared="${esc(id)}">${r.place===ONLINE?'オンラインで参加する':'ここで合流して集中する'}</button></div>`)}
-function joinSharedRoom(id){const r=sharedRooms().find(x=>x.id===id);if(!r||running){$('#modal').close();render();toast('この作業場にはいま入れません');return}const taskId=$('#joinTask')?.value??focusTaskId(),task=state.tasks.find(t=>String(t.id)===String(taskId));startSession({mine:false,shared:id,key:'shared-'+id,host:'u_'+id,title:r.title||'自由に集中',type:'勉強',place:r.place||'',mark:r.mark||'',endAt:r.endAt,members:remoteMembers(r),arrived:r.place===ONLINE},taskId);window.share.join(id,{name:state.profile.name,avatar:state.profile.avatar,task:task?task.title:'自由に集中'});toast(r.hostName+'さんの作業場に入りました')}
-// 共有の作業場が変わったとき：集中中なら同じ作業場のメンバーを最新にし、そうでなければ一覧を描き直す
+function joinSharedRoom(id){const r=sharedRooms().find(x=>x.id===id);if(!r||running){$('#modal').close();render();toast('This room is not available');return}const taskId=$('#joinTask')?.value??focusTaskId(),task=state.tasks.find(t=>String(t.id)===String(taskId));startSession({mine:false,shared:id,key:'shared-'+id,host:'u_'+id,title:r.title||'自由に集中',type:'勉強',place:r.place||'',mark:r.mark||'',endAt:r.endAt,members:remoteMembers(r),arrived:r.place===ONLINE},taskId);window.share.join(id,{name:state.profile.name,avatar:state.profile.avatar,task:task?task.title:'自由に集中'});toast(r.hostName+'さんの作業場に入りました')}
 window.onSharedRooms=()=>{const s=window.share,r=state.room;if(!(running&&r)){refreshRooms();return}let changed=false;if(r.mine){const d=s.rooms.find(x=>x.id===s.me),rem=d?remoteMembers(d).slice(1):[];rem.filter(([k])=>!(r.remote||[]).some(([j])=>j===k)).forEach(([k])=>toast(people[k].name+'さんが作業場に入りました','rice_mascot_happy'));changed=JSON.stringify(rem)!==JSON.stringify(r.remote||[]);r.remote=rem}else if(r.shared){const d=s.rooms.find(x=>x.id===r.shared);if(d){const m=remoteMembers(d);changed=JSON.stringify(m)!==JSON.stringify(r.members);r.members=m}}if(changed){save();if(page==='friends'&&friendView==='rooms'&&!$('#modal').open)render()}};
