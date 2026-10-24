@@ -576,3 +576,8 @@ body[data-page="login"] .shell{background:#feda30 url('assets/library/login_bg.w
 .login-back{position:absolute;top:calc(14px + env(safe-area-inset-top));left:14px;background:#fffef8cc}
 .login{position:relative}
 .welcome-logo{margin-top:max(64px,19vh)}.welcome-login-link{background:none;border:0}.welcome-start{font-size:26px}
+/* 作業場の一覧：残りの高さの中でスクロール（3つ以上でも切れない）、顔の欄の幅をそろえる */
+[data-page="friends"] .room-list{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px 2px 10px;margin:0 -2px}
+.room-row{padding:8px 12px;flex-shrink:0}
+.room-faces{width:58px;flex-shrink:0;justify-content:flex-start}
+@media(max-height:740px){.room-row{padding:6px 12px}.room-copy small{margin-top:0}}
