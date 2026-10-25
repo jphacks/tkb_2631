@@ -3,6 +3,7 @@
     "rules": "firestore.rules"
   },
   "hosting": {
+    "site": "tanboru-2da31",
     "public": ".",
     "ignore": [
       "firebase.json",
