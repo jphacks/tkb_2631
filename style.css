@@ -504,7 +504,8 @@ body[data-page="login"] main{height:100%;padding:0;background:none}
 .login-card input{margin-top:6px;height:46px;padding:0 14px;border:0;border-radius:12px;background:#f6f3e4;font-size:16px;color:var(--ink)}
 .login-card .form-error{margin:0;min-height:0;font-size:14px;color:var(--red)}
 .login-card .form-error:empty{display:none}
-.login-btn{height:50px;border-radius:25px;font-size:16px;margin-top:4px}
+.login-btn{position:relative;height:50px;border-radius:25px;background:#000;color:#fffef8;font-size:16px;margin-top:4px}
+.login-btn::after{content:"";position:absolute;top:50%;right:20px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:8px solid currentColor;transform:translateY(-50%)}
 .settings-logout{display:block;margin:10px auto 0;font-size:14px}
 /* 集中中の画面：「着いた」は自分の顔の下に。背の低い画面（実機のブラウザ）でも重ならないように */
 .arrived-pill{margin-top:2px;padding:4px 12px;border-radius:12px;background:#188358;color:#fffef8;font-size:14px;font-weight:700;line-height:1.3}
