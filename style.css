@@ -121,6 +121,9 @@ dialog{border:0;box-shadow:0 12px 50px rgba(25,50,35,.18)}
 .s14{background-image:url('assets/library/gyudon.webp');background-position:center}
 .s15{background-image:url('assets/library/doria.webp');background-position:center}
 .s16{background-image:url('assets/library/donabe_rice.webp');background-position:center}
+.s17{background-image:url('assets/library/bento.webp');background-position:center}
+.s18{background-image:url('assets/library/ebi_tendon.webp');background-position:center}
+.s19{background-image:url('assets/library/tamago_kake_gohan.webp');background-position:center}
 
 nav .ui-icon{width:32px;height:32px;object-fit:contain}
 
