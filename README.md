@@ -86,7 +86,6 @@ Firebase Hosting への公開方法と2台での確認方法は [FIREBASE_SETUP.
 ### 独自技術
 #### ハッカソンで開発した独自機能・技術
 * ポイント → 稲の成長 → 収穫 → 料理づくりへとつながる育成のしくみ（[app.js](app.js)）
-* お店で具材を買い、お米と合わせて料理をつくるレシピ機能（commit [52deddd](https://github.com/jphacks/tkb_2631/commit/52deddd), [cb7af59](https://github.com/jphacks/tkb_2631/commit/cb7af59)）
 * タスク画面の表示件数を画面の高さに合わせて自動で調整し、小さいスマホでもスクロールせずに使えるようにした
 
 ## ローカルでの動かし方
