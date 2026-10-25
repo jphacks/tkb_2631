@@ -2,7 +2,7 @@
 
 一緒にがんばって、みんなで実らせる。
 
-![たんぼる](docs/tanboru-preview.png)
+![たんぼる](docs/tanboru-screens.png)
 
 <!-- デモ動画ができたら、上の画像を動画リンク付きの画像に差し替える -->
 
